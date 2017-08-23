@@ -1,0 +1,95 @@
+% =========================================================
+% === These macros are relevant to all of the documents ===
+% =========================================================
+
+% === To allow for labeling of rows and columns of a matrix ===
+%\usepackage{kbordermatrix}
+\usepackage{packages/kbordermatrix}
+\renewcommand{\kbldelim}{(} % Left delimiter
+\renewcommand{\kbrdelim}{)} % Right delimiter
+
+% === Commonly re-occurring symbols ===
+\newcommand{\hgraph}{\mathcal{H}}
+\newcommand{\graph}{\mathcal{G}}
+\newcommand{\nodes}{\mathcal{N}}
+\newcommand{\weights}{\mathcal{W}}
+\newcommand{\edges}{\mathcal{E}}
+\newcommand{\trans}{\mathcal{T}}
+\newcommand{\ind}{S}
+\newcommand{\inhibit}{\mathcal{I}}
+\newcommand{\netperm}{\Pi}
+\newcommand{\Hilb}{\mathcal{H}}
+\newcommand{\indep}{\perp\!\!\!\perp}
+\newcommand{\ancestralindep}{\perp}
+\newcommand{\valprod}{\times}
+\newcommand{\bigvalprod}{\prod}
+\newcommand{\com}{\mathrel{\Yright\hspace{-0.2em}\Yleft}}
+\newcommand{\ext}{\mathrel{\Yleft}}
+\newcommand{\res}{\mathrel{\Yright}}
+\newcommand{\gep}{\varphi}
+\newcommand{\gp}{\Phi}
+\newcommand{\geo}{\omega}
+\newcommand{\go}{\Omega}
+\newcommand{\mscenario}{\mathcal{V}}
+\newcommand{\jointvar}{\La}
+% \newcommand{\mset}{\gamma}
+% \newcommand{\extmset}{\Gamma}
+\newcommand{\supp}[1]{\si\br{#1}}
+\newcommand{\kone}{\mathbf{1}}
+\newcommand{\kzer}{\textcolor{gray}{0}}
+
+\newcommand{\probplotvalue}[1]{%
+    \definecolor{probvalcolor}{RGB}{#1}%
+    \definecolor{outlinecolor}{RGB}{127, 127, 127}%
+    \begin{tikzpicture}[baseline={([yshift=-.5ex]current bounding box.center)}]%
+        \pgfmathsetmacro{\size}{0.2};%
+        \draw[outlinecolor, fill=probvalcolor] (-\size,-\size) -- (-\size, +\size) -- (+\size, +\size) -- (+\size, -\size) -- cycle;%
+    \end{tikzpicture}%
+}%
+
+% \newcommand{\mext}[1]{E_{#1}}
+% \newcommand{\mul}[1]{\Gamma_{#1}}
+\newcommand{\isext}[2]{\delta_{#1 \ext #2}}
+\newcommand{\ts}{{\graph}}
+\newcommand{\tcdot}{} % Tentative cdot, not sure if I want to keep dots
+\newcommand{\fritz}{\text{F}}
+\newcommand{\p}[1]{#1}
+
+% === Mathematical operators that are denoted with words ===
+\newcommand{\setoperator}[1]{%
+\expandafter\DeclareDocumentCommand\csname#1\endcsname{O{} O{} m}{{\mathsf{#1}_{##1}^{##2}}\br{##3}}%
+}
+
+\setoperator{Pa} % Parents of a node
+\setoperator{Ch} % Children of a node
+\setoperator{An} % Ancestry of a node
+\setoperator{Sub} % subgraph
+\setoperator{AnSub} % Ancestral subgraph
+\setoperator{De} % Ancestral subgraph
+\setoperator{Ext} % Extension of outcomes
+\setoperator{Com} % Compatible equivalence relation
+\setoperator{Nec} % Necessary nodes
+\setoperator{UnNec} % Unnecessary nodes
+\setoperator{Inj} % injectable sets
+\setoperator{ImInj} % images of the injectable sets
+\setoperator{PreInj} % Pre-injectable sets
+\setoperator{AnSepExpr} % as-expressible sets
+\setoperator{Expr} % expressible sets
+\setoperator{ImPreInj} % images of the Pre-injectable sets
+\setoperator{Aut} % graph automorphism
+\setoperator{Orb} % Group Orbits
+\setoperator{Perm} % Permutation group
+\newcommand{\PermM}[1]{\La_{#1}} % Permutation matrix
+% \setoperator{Out} % Outcome space
+\newcommand{\events}[1]{\Omega\br{#1}} % Set of events
+\newcommand{\outcomes}[1]{\mathcal{O}_{#1}} % Set of outcomes
+\newcommand{\domain}[1]{\mathcal{D}\br{#1}} % Domian
+\newcommand{\restrict}[2]{{#1}|_{#2}} % Restriction
+\newcommand{\probset}[1]{\mathcal{P}_{#1}} % probsets
+% \setoperator{Dom} % Domian
+% \setoperator{Dom} % Domian
+
+\newcommand{\outc}[1]{o\bs{#1}} % Fritz's BBTII notation for observed outcomes
+\newcommand{\prob}[1]{{\mathsf{p}}_{#1}}
+% \DeclareDocumentCommand{\prob}{O{} O{}}{\ifthenelse{\equal{#1}{}}{P}{P_{#1}}\ifthenelse{\equal{#2}{}}{}{\br{#2}}} % probability distribution
+% \DeclareDocumentCommand{\probvec}{O{} O{}}{\ifthenelse{\equal{#1}{}}{\mathcal{P}}{\mathcal{P}_{#1}}\ifthenelse{\equal{#2}{}}{}{\br{#2}}} % probability distribution vector

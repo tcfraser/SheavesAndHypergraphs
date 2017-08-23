@@ -1,0 +1,188 @@
+% Packages
+\usepackage{amsmath}
+\usepackage{esint} % For closed integrals
+\usepackage{packages/fancyvec} % For better vectors
+\usepackage{amssymb} % For set symbols
+\usepackage{mathtools} % For ceiling/floor brackets
+\usepackage{siunitx} % For units
+
+% Brackets
+\let\originalleft\left
+\let\originalright\right
+\renewcommand{\left}{\mathopen{}\mathclose\bgroup\originalleft}
+\renewcommand{\right}{\aftergroup\egroup\originalright}
+
+\newcommand{\ba}[1]{\left< #1 \right>} % brackets angled
+\newcommand{\bs}[1]{\left[ #1 \right]} % brackets square
+\newcommand{\br}[1]{\left( #1 \right)} % brackets round
+\newcommand{\bc}[1]{\left\{ #1 \right\}} % brackets curly
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil} % brackets ceiling
+\newcommand{\bre}[1]{\left(#1\right\rvert} % evaluated at brackets
+\newcommand{\bse}[1]{\left[#1\right\rvert} % evaluated at brackets
+\newcommand{\abs}[1]{\left| #1 \right|} % brackets absolute value
+\newcommand{\bra}[1]{\left< #1 \right|} % bra
+\newcommand{\ket}[1]{\left| #1 \right>} % ket
+\newcommand{\braket}[2]{\left< #1 \middle| #2 \right>} % bra|ket
+\newcommand{\bcm}[2]{\left\{ #1 \middle| #2 \right\}} % bra|ket
+\newcommand{\bramidket}[3]{\left< #1 \middle| #2 \middle| #3 \right>} % bra|mid|ket
+
+\newcommand{\f}[2]{\frac{#1}{#2}} % fraction shorthand
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert} % norm
+\newcommand{\cross}{\times} % cross alias
+\newcommand{\tenprod}{\otimes} % tensor product alias
+\newcommand{\iso}{\cong} % isomorphic alias
+\newcommand{\del}{\nabla} % nabla alias
+\newcommand{\vdel}{\vec{\nabla}} % nabla alias
+\newcommand{\curl}{\vdel\times} % curl operator
+\renewcommand{\div}{\vdel\cdot} % divergence operator NOTE: this overrides the division symbol
+\newcommand{\lapl}{\del^2} % Laplacian
+\renewcommand{\inf}{\infty} % infty alias NOTE: this replaces the inf operator
+\newcommand{\di}{\partial} % di alias
+\newcommand{\defined}{\equiv} % defined alias
+\newcommand{\celsius}{^o C} % Simple celsius I'll likely improve later
+\newcommand{\w}{\omega} % omega alias
+\newcommand{\sL}{\mathcal{L}} % Lagrangian script
+\newcommand{\eq}{\addtocounter{equation}{1}\tag{\theequation}} % adds a number to unnumbered equation
+\newcommand{\st}{\mid} % integral with limits alias
+\newcommand{\tsb}[1]{_\text{#1}} % Text subscript
+\newcommand{\tsp}[1]{^\text{#1}} % Text superscript
+% \newcommand{\note}[1]{\quad \text{#1}} % Equation note
+\newcommand{\ident}{\mathbbm{1}}
+
+% sequences
+\newcommand{\tok}[2]{#1, \ldots, #2}
+
+% braces
+\newcommand{\untext}[2]{\underbrace{#1}_{\text{#2}}}
+\newcommand{\ovtext}[2]{\overbrace{#1}^{\text{#2}}}
+\newcommand{\iszero}[1]{\underbrace{#1}_{= 0}}
+
+% greek
+\newcommand{\al}{\alpha}
+\newcommand{\be}{\beta}
+\newcommand{\ga}{\gamma}
+\newcommand{\Ga}{\Gamma}
+\newcommand{\de}{\delta}
+\newcommand{\De}{\Delta}
+\newcommand{\ep}{\epsilon}
+\newcommand{\vep}{\varepsilon}
+\newcommand{\Ep}{\epsilon}
+\newcommand{\om}{\omega}
+\newcommand{\Om}{\Omega}
+\newcommand{\te}{\theta}
+\newcommand{\la}{\lambda}
+\newcommand{\La}{\Lambda}
+\newcommand{\ka}{\kappa}
+\newcommand{\Ka}{\Kappa}
+\newcommand{\ro}{\rho}
+\newcommand{\Ro}{\Rho}
+\renewcommand{\si}{\sigma}
+\newcommand{\Si}{\Sigma}
+
+% Operators
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\Lin}{Lin}
+\DeclareMathOperator{\Bin}{Bin}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\sinc}{sinc}
+
+% arrows
+\newcommand{\ar}{\rightarrow}
+\newcommand{\lar}{\leftarrow}
+
+% Horizontal Box used for drawing in post-compilation
+\newcommand{\cbox}{\begin{center}
+\fbox{\begin{minipage}{4in} \hfill\vspace{2in} \end{minipage}}
+\end{center}}
+
+% Math Sets
+\newcommand{\R}{{\mathbb{R}}}
+%\ProvideCommand{\C}{{\mathbb{C}}}
+\newcommand{\Z}{{\mathbb{Z}}}
+\newcommand{\N}{{\mathbb{N}}}
+\newcommand{\Q}{{\mathbb{Q}}}
+
+% Script macro
+\newcommand{\s}[1]{\mathcal{#1}}
+
+% Vectors
+% see fancyvec
+% tilde
+\newcommand{\ti}[1]{\tilde{#1}\hspace{0pt}} % Note the hspace is for {\ti{a}^b}_c to render correctly
+\newcommand{\tbar}[1]{\bar{#1}\hspace{0pt}} % Note the hspace is for {\bar{a}^b}_c to render correctly
+\newcommand{\tk}[1]{\hspace{0pt}} % Note the hspace is for {\bar{a}^b}_c to render correctly
+
+% Scipt letters
+\def\rcurs{{\mbox{$\resizebox{.09in}{.08in}{\includegraphics[trim= 1em 0 14em 0,clip]{script_r/ScriptR.pdf}}$}}}
+\def\brcurs{{\mbox{$\resizebox{.09in}{.08in}{\includegraphics[trim= 1em 0 14em 0,clip]{script_r/BoldR.pdf}}$}}}
+
+% Differentials
+\newcommand{\dif}{\mathrm{d}} % differential
+\newcommand{\indif}{{\mathchar'26\mkern-12mu \mathrm{d}}} % differential
+\newcommand{\dx}{\dif x}
+\newcommand{\dy}{\dif y}
+\newcommand{\dz}{\dif z}
+\newcommand{\dt}{\dif t}
+\newcommand{\ddt}{\der{}{t}}
+\newcommand{\dphi}{\dif \phi}
+\newcommand{\dtheta}{\dif \theta}
+\newcommand{\drho}{\dif \rho}
+\newcommand{\ds}{\dif s}
+\newcommand{\pder}[2]{\frac{\partial #1}{\partial #2}} % partial derivative
+\newcommand{\pderk}[3]{\frac{\partial^{#1} #2}{\partial #3^{#1}}} % partial derivative
+\newcommand{\pdert}[3]{\br{\frac{\partial #1}{\partial #2}}_{#3}} % partial derivative
+\newcommand{\pdder}[2]{\frac{\partial^2 #1}{\partial #2^2}} % partial double derivative
+\newcommand{\der}[2]{\frac{\dif #1}{\dif #2}} % derivative
+\newcommand{\derk}[3]{\frac{\dif^{#1} #2}{\dif #3^{#1}}} % derivative
+\newcommand{\dert}[3]{\br{\frac{\dif #1}{\dif #2}}_{#3}} % partial derivative
+\newcommand{\dder}[2]{\frac{\dif^2 #1}{\dif #2^2}} % double derivative
+
+% integrals
+\newcommand{\intl}{\int\limits} % integral with limits alias
+\newcommand{\intlf}{\intl_{-\infty}^{\infty}} % integral with limits alias
+\newcommand{\ointl}{\oint\limits} % integral with limits alias
+\newcommand{\iintl}{\iint\limits} % integral with limits alias
+\newcommand{\idotsintl}{\idotsint\limits} % integral with limits alias
+\newcommand{\oiintl}{\oiint\limits} % integral with limits alias
+\newcommand{\iiintl}{\iiint\limits} % integral with limits alias
+\newcommand{\oiiintl}{\oiiint\limits} % integral with limits alias
+
+% siunitx
+\DeclareSIUnit\parsec{pc}
+\DeclareSIUnit\rot{rot}
+\DeclareSIUnit\yr{yr}
+\DeclareSIUnit\AU{AU}
+
+% Piecewise
+\newcommand{\piecewise}[4]{
+    \begin{cases}
+        #1 & #2 \\
+        #3 & #4
+    \end{cases}
+}
+
+
+% Wronskian
+\newcommand{\wron}{W[y_1,y_2](x)}
+
+% Block vector or matrix
+\newcommand{\mtrx}[1]{
+    \begin{bmatrix}
+    #1
+    \end{bmatrix}
+}
+
+% Block vector or matrix
+\newcommand{\pmtrx}[1]{
+    \begin{bmatrix}
+    #1
+    \end{bmatrix}
+}
+
+% 2 Column Vector
+\newcommand{\twovec}[2]{
+    \begin{bmatrix}
+    #1 \\
+    #2
+    \end{bmatrix}
+}

@@ -1,0 +1,65 @@
+% === Revtex Declaration ===
+\documentclass[aps, 10pt, english, twoside, twocolumn, pra, nofootinbib, tightenlines, longbibliography, superscriptaddress]{revtex4-1}
+
+% === All of the Packages I use frequently ===
+\usepackage{packages/document_config}
+\usepackage{packages/shared}
+\usepackage{packages/misc_commands}
+
+\begin{document}
+    \title{Weighted Hypergraph Transversals \& Contextuality}
+    \author{Thomas C. Fraser}
+    \email{tcfraser@tcfraser.com}
+    \affiliation{Perimeter Institute for Theoretical Physics, Waterloo, Ontario, Canada, N2L 2Y5}
+    \affiliation{University of Waterloo, Waterloo, Ontario, Canada, N2L 3G1}
+    % \author{Elie Wolfe}
+    % \affiliation{Perimeter Institute for Theoretical Physics, Waterloo, Ontario, Canada, N2L 2Y5}
+    % \email{ewolfe@perimeterinstitute.ca}
+    \date{\today}
+    \begin{abstract}
+        This is the abstract.
+    \end{abstract}
+    \maketitle
+    \tableofcontents
+
+    \section{Introduction}
+    \subsection{Applications}
+
+    \section{Marginal Satisfiability}
+    \subsection{Definitions}
+    To every random variable\footnote{Throughout this document, it is assumed that all random variables are discrete and have finite cardinality.} $v$ there corresponds a prescribed set of \term{outcomes} $\outcomes{v}$ and a set of \term{events over $v$} denoted $\events{v}$ corresponding to the set of all functions of the form $\w : \bc{v} \to \outcomes{v}$. Evidently, $\events{v}$ and $\outcomes{v}$ are isomorphic structures and their distinction can be confounding. There is rarely any harm in referring synonymously to either as outcomes. Nonetheless, a sheaf-theoretic treatment of contextuality \cite{Abramsky_2011} demands the distinction. Specifically for this work, the distinction becomes essential for the exploitation of marginal symmetries in \cref{sec:marginal_symmetries}. As a natural generalization we define the event over a collection of random variables $V = \bc{v_1, \ldots, v_n}$ in a parallel manner:
+    \[ \events{V} \defined \bc{\w : V \to \outcomes{V} \mid \forall v \in V, \w\br{v} \in \outcomes{v}} \]
+    Furthermore, the \term{domain $\domain{\w}$} of an event $\w$ is the set of random variables it valuates, i.e. if $\w \in \events{V}$ then $\domain{\w} = V$.
+
+    For every $V' \subset V$ and $\w \in \events{V}$, the \term{restriction of $\w$ onto $V'$} (denoted $\restrict{\w}{V'}$) corresponds to the unique event in $\events{V'}$ that agrees with $\w$ for all valuations of variables in $V'$, i.e. $\forall v' \in V': \restrict{\w}{V'}\br{v'} = \w\br{v'}$. Using this notational framework, a probability distribution or simply \term{distribution} $\prob{V}$ is a probability measure on $\events{V}$, assigning to each $\w \in \events{V}$ a real number $\prob{V}\br{\w} \in \bs{0,1}$ such that $\sum_{\w \in \events{V}} \prob{V}\br{\w} = 1$. The set of all distributions over $\events{V}$ is denoted $\probset{V}$. Moreover, given $\prob{V} \in \probset{V}$ and $V' \subset V$, there is an induced distribution $\restrict{\prob{V}}{V'} \in \probset{V'}$ obtained by \textit{marginalizing} $\prob{V}$:
+    \[ \restrict{\prob{V}}{V'}\br{\w'} = \sum_{\substack{\w \in \events{V} \\ \restrict{\w}{V'} = \w'}} \prob{V}\br{\w} \]
+    Presently, the reader is equipped with sufficient notation and terminology to comprehend the \term{marginal satisfiability problem}: given a collection of $m$ distributions $\bc{\prob{V_1},\ldots,\prob{V_m}}$, does there exist a distribution $\prob{\jointvar} \in \probset{\jointvar}$ where $\jointvar \defined \bigcup_{i = 1}^{m} V_m$ such that $\forall i : \restrict{\prob{\jointvar}}{V_i} = \prob{V_i}$?
+
+    To facilitate further discussion of this problem, several pieces of nomenclature will be introduced. First, the set $\mscenario = \bc{V_1, \ldots, V_m}$ is called the \term{marginal scenario} while its elements are called the \term{marginal contexts}. The collection of distributions $\prob{\bs{\mscenario}} \defined \bc{\prob{V_1},\ldots,\prob{V_m}}$\footnote{The subscript $\bs{\mscenario}$ is contained in square brackets for clarity; $\prob{\bs{\mscenario}}$ is \textit{not} a distribution but a set of distributions over $\mscenario$.} is called the \term{marginal model}~\cite{Fritz_2011}\footnote{In~\cite{Abramsky_2011}, $\prob{\bs{\mscenario}}$ is instead called an \textit{empirical model}.}. The distribution $\prob{\jointvar}$, if it exists, is termed the \term{joint distribution}. Strictly speaking, as defined by~\cite{Fritz_2011}, a marginal scenario forms an \textit{abstract simplicial complex}, meaning it satisfies the supplementary required that all subsets of contexts are also contexts, i.e. $\forall V \in \mscenario : V' \subset V \implies V' \in \mscenario$. Throughout this section, we exclusively consider (without loss of generality) \textit{maximal} marginal scenarios, restricting our focus to the contexts which are contained in no others. Finally, a marginal model $\prob{\bs{\mscenario}}$ is said to be \term{contextual}, and will be denoted $\prob{\bs{\mscenario}} \in \s C$ if it does not admit a joint a distribution and \term{non-contextual} otherwise ($\prob{\bs{\mscenario}} \not \in \s C$). Equipped with additional terminology and notation, the marginal satisfiability problem now reads: given $\prob{\bs{\mscenario}}$, is $\prob{\mscenario} \in \s C$ or not?
+
+    \subsection{Linearity}
+    \subsection{Polytope Projection}
+    \subsection{Logical Contextuality}
+
+    \section{An Observation}
+    \subsection{An Antecedant Hierarchy}
+    \subsection{Irreducibility}
+    \subsection{Marginal Symmetries}
+    \label{sec:marginal_symmetries}
+    \subsection{Curated Inequalities}
+    \subsection{Relaxations}
+
+    \section{Weighted Hypergraph Transervals}
+    \subsection{Preliminaries}
+    \subsection{Hypergraph Transversals}
+    \subsection{Adding Weights}
+
+    \section{Conclusions}
+    \section*{Acknowledgments}
+
+    \setlength{\bibsep}{3pt plus 3pt minus 2pt}
+    \bibliographystyle{apsrev4-1}
+    \nocite{apsrev41Control}
+    \bibliography{references}
+
+\end{document}

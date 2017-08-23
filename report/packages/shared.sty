@@ -1,0 +1,57 @@
+% === Packages ===
+\usepackage{siunitx} % For units
+\usepackage{amsmath} % American mathematics society
+\usepackage{bbm}
+\usepackage{esint} % For closed integrals
+\usepackage{listings} % For code snippets
+\usepackage{amssymb} % For set symbols
+\usepackage{stmaryrd} % For Y arrows
+\usepackage[capitalise]{cleveref}
+\Crefname{eqs}{Eqs.}{Eqs.}
+\creflabelformat{eqs}{(#2#1#3)}
+\crefrangelabelformat{equation}{(#3#1#4-#5#2#6)}
+\Crefmultiformat{equation}{Eqs.~(#2#1#3}{,#2#1#3)}{,#2#1#3}{,#2#1#3)}
+\crefrangelabelformat{eqs}{(#3#1#4-#5#2#6)}
+\Crefmultiformat{eqs}{Eqs.~(#2#1#3}{,#2#1#3)}{,#2#1#3}{,#2#1#3)}
+% \usepackage[style=phys]{biblatex} % For physics style formatting
+\usepackage{ifthen} % For checking optional parameters
+\usepackage{color} % For Colors
+\usepackage{array} % For better tables
+\usepackage[makeroom]{cancel} % For canceling out terms
+\usepackage{fancyhdr} % Required for custom headers
+\usepackage{extramarks} % Required for headers and footers
+\usepackage{lastpage} % For total page count
+\usepackage{tikz} % For drawing things on graphs
+\usetikzlibrary{calc} % For relative points
+\usetikzlibrary{decorations.markings, arrows.meta, arrows, decorations.pathreplacing, shapes.geometric} % for arrows half way
+\usepackage{pgfplots} % For Graphing
+\usepgflibrary{fpu} % To deal with dimension too large errors
+\usepackage{chngpage} % For indentation
+\usepackage{graphicx} % For images
+\usepackage[super]{nth} % For 1st, 2nd, 3rd etc.
+\usepackage{epstopdf} % For .eps figures
+\usepackage{centernot} % For doesn't implies
+\usepackage{pgfplotstable} % For linear regression on pgfplot graphs
+\pgfplotsset{compat=1.12} % Requesting a specific version
+\usepackage[utf8]{inputenc} % Font with all characters
+\usepackage[T1]{fontenc} % Font with all characters
+% \usepackage{dsfont} % For \mathds
+% \usepackage{eufrak} % For gothic font letters in mathmode Note: Redundant if amsfonts is used
+\usepackage{lmodern} % Font with all characters
+\usepackage{csquotes} % For quotes
+%\setlength{\belowcaptionskip}{-10pt}
+%\usepackage[justification=justified,labelfont=small]{subcaption}
+%\usepackage{ragged2e}
+%\DeclareCaptionJustification{justified}{\justifying}
+%\captionsetup{justification=justified,singlelinecheck=false,labelfont=small}
+%\PassOptionsToPackage{justification=justified}{caption}
+\usepackage{enumitem}
+
+% === Custom Packages ===
+\usepackage{packages/mathmacros} % For TC's custom macros for math
+\usepackage{packages/scope} % For TC's custom set, const, and scope parameters configuarion
+\usepackage{packages/draft} % For identifying work unfinished
+
+% === Drafting Declarations ===
+\draftprofile[TC Fraser]{TC}{Red}
+\draftprofile[Elie Wolfe]{E}{Green}

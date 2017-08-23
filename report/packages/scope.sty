@@ -1,0 +1,32 @@
+\usepackage{xspace} % For annoying horizontal space to the right of string terms.
+
+% Defining const terms with appropriate xspace.
+\newcommand{\const}[2]{%
+\expandafter\newcommand\csname#1\endcsname{#2\xspace}%
+}
+
+% Sets a command to a value
+\newcommand{\set}[2]{
+    \ifcsname #1\endcsname%
+        \expandafter\renewcommand\csname#1\endcsname{#2\xspace}%
+    \else%
+        \expandafter\newcommand\csname#1\endcsname{#2\xspace}%
+    \fi%
+}
+
+\def\declare#1{\expandafter\def\csname#1\endcsname}
+
+%\def\setcat#1{\declare{getcat#1}##1{GOT CAT ##1!}}
+
+\def\scopedelim{private}
+
+% 1st Param: The name of the command; 2nd Param: The default recall value
+\def\setscope#1#2{%
+    \declare{\scopedelim#1}{#2\xspace}%
+    \declare{#1}##1{\declare{\scopedelim#1}{##1\xspace}\xspace}%
+}
+
+% 1st Param: The name of the command
+\def\getscope#1{%
+    \csname\scopedelim#1\endcsname%
+}
