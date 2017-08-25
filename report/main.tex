@@ -35,12 +35,12 @@
     \[ \restrict{\prob{V}}{V'}\br{\w'} = \sum_{\substack{\w \in \events{V} \\ \restrict{\w}{V'} = \w'}} \prob{V}\br{\w} \eq \label{eq:marginalization_defined} \]
     Presently, the reader is equipped with sufficient notation and terminology to comprehend the \term{marginal (satisfiability) problem}: given a collection of $m$ distributions $\bc{\prob{V_1},\ldots,\prob{V_m}}$, does there exist a distribution $\prob{\jointvar} \in \probset{\jointvar}$ where $\jointvar \defined \bigcup_{i = 1}^{m} V_m$ such that $\forall i : \restrict{\prob{\jointvar}}{V_i} = \prob{V_i}$?
 
-    To facilitate further discussion of this problem, several pieces of nomenclature will be introduced. First, the set $\mscenario = \bc{V_1, \ldots, V_m}$ is called the \term{marginal scenario} while its elements are called the \term{marginal contexts}. The collection of distributions $\prob{\mscenariowrap} \defined \bc{\prob{V_1},\ldots,\prob{V_m}}$\footnote{The subscript $*$ preceding $\mscenariowrap$ is added for clarity; $\prob{\mscenariowrap}$ is \textit{not} a distribution but a set of distributions over $\mscenario$. The $\mscenariowrap$ convention is adopted throughout this report.} is called the \term{marginal model}~\cite{Fritz_2011}\footnote{In~\cite{Abramsky_2011}, $\prob{\mscenariowrap}$ is instead called an \textit{empirical model}.}. The distribution $\prob{\jointvar}$, if it exists, is termed the \term{joint distribution}. Strictly speaking, as defined by~\cite{Fritz_2011}, a marginal scenario forms an \textit{abstract simplicial complex}, meaning it satisfies the supplementary required that all subsets of contexts are also contexts, i.e. $\forall V \in \mscenario : V' \subset V \implies V' \in \mscenario$. Throughout this section, we exclusively consider (without loss of generality) \textit{maximal} marginal scenarios, restricting our focus to the contexts which are contained in no others. Finally, a marginal model $\prob{\mscenariowrap}$ is said to be \term{contextual}, and will be denoted $\prob{\mscenariowrap} \in \s C \subseteq \probset{\mscenariowrap}$ if it does not admit a joint a distribution and \term{non-contextual} otherwise ($\prob{\mscenariowrap} \not \in \s C$). Equipped with additional terminology and notation, the marginal problem now reads: given $\prob{\mscenariowrap}$, is $\prob{\mscenariowrap} \in \s C$ or not?
+    To facilitate further discussion of this problem, several pieces of nomenclature will be introduced. First, the set $\mscenario = \bc{V_1, \ldots, V_m}$ is called the \term{marginal scenario} while its elements are called the \term{marginal contexts}. The collection of distributions $\prob{\mscenariowrap} \defined \bc{\prob{V_1},\ldots,\prob{V_m}}$\footnote{The subscript $*$ preceding $\mscenariowrap$ is added for clarity; $\prob{\mscenariowrap}$ is \textit{not} a distribution but a set of distributions over $\mscenario$. The $\mscenariowrap$ convention is adopted throughout this report.} is called the \term{marginal model}~\cite{Fritz_2011}\footnote{In~\cite{Abramsky_2011}, $\prob{\mscenariowrap}$ is instead called an \textit{empirical model}.}. The distribution $\prob{\jointvar}$, if it exists, is termed the \term{joint distribution}. Strictly speaking, as defined by~\cite{Fritz_2011}, a marginal scenario forms an \textit{abstract simplicial complex}, meaning it satisfies the supplementary required that all subsets of contexts are also contexts, i.e. $\forall V \in \mscenario : V' \subset V \implies V' \in \mscenario$. Throughout this work, we exclusively consider (without loss of generality) \textit{maximal} marginal scenarios, restricting our focus to the contexts which are contained in no others. Finally, a marginal model $\prob{\mscenariowrap}$ is said to be \term{contextual}, and will be denoted $\prob{\mscenariowrap} \in \s C \subseteq \probset{\mscenariowrap}$ if it does not admit a joint distribution and \term{non-contextual} otherwise ($\prob{\mscenariowrap} \not \in \s C$). Equipped with additional terminology and notation, the marginal problem now reads: given $\prob{\mscenariowrap}$, is $\prob{\mscenariowrap} \in \s C$ or not?
 
     \subsection{Linearity}
     An essential feature of the marginal problem is linearity; the marginalization of $\prob{\jointvar}$ onto the marginal contexts $\bc{\restrict{\prob{\jointvar}}{V} \mid V \in \mscenario}$ is a linear transformation, requiring only the summations pursuant to \cref{eq:marginalization_defined}. Consequently, it is advantageous to consider the statement of the marginal problem as a matrix multiplication. To this end, for each marginal scenario $\mscenario$ we define a bitwise matrix $\incidence$ called the \term{incidence matrix} which implements this mapping. The columns of $\incidence$ are indexed by \textit{joint events} $j \in \events{\jointvar}$ and the rows are indexed by \textit{marginal events} $m \in \events{V}$ for some $V \in \mscenario$. By deliberate abuse of notation, we will denote the set of all marginal events as $\events{\mscenariowrap}$ and is defined as the following disjoint union:
     \[ \events{\mscenariowrap} \defined \coprod_{V \in \mscenario} \events{V} \]
-    The $\abs{\events{\mscenariowrap}}\times\abs{\events{\jointvar}}$ matrix $\incidence$ is then defined element-wise for $m \in \events{\mscenariowrap}$ and $j \in \events{\jointvar}$:
+    The $\abs{\events{\mscenariowrap}}\times\abs{\events{\jointvar}}$ incidence matrix $\incidence$ is then defined element-wise for $m \in \events{\mscenariowrap}$ and $j \in \events{\jointvar}$:
     \[ \incidence^{m}_{j} = \begin{cases}
         1 & \restrict{j}{\domain{m}} = m\\
         0 & \text{otherwise}
@@ -49,23 +49,7 @@
 
     To illustrate this concretely, consider the following example. Let $\jointvar$ be $3$ binary variables $\bc{a,b,c}$ and $\mscenario$ be the marginal scenario $\mscenario = \bc{\bc{a,b}, \bc{b,c}, \bc{a,c}}$. The incidence matrix for $\mscenario$ becomes:
     \begin{equation}
-        \resizebox{1.0\hsize}{!}{$
-            \kbordermatrix{
-                (a,b,c) \:\: \mapsto & (0,0,0)\!\! & (0,0,1)\!\! & (0,1,0)\!\! & (0,1,1)\!\! & (1,0,0)\!\! & (1,0,1)\!\! & (1,1,0)\!\! & (1,1,1)\!\! \\
-                (a\mapsto0, b\mapsto0) & \kone & \kone & \kzer & \kzer & \kzer & \kzer & \kzer & \kzer \\
-                (a\mapsto0, b\mapsto1) & \kzer & \kzer & \kone & \kone & \kzer & \kzer & \kzer & \kzer \\
-                (a\mapsto1, b\mapsto0) & \kzer & \kzer & \kzer & \kzer & \kone & \kone & \kzer & \kzer \\
-                (a\mapsto1, b\mapsto1) & \kzer & \kzer & \kzer & \kzer & \kzer & \kzer & \kone & \kone \\
-                (b\mapsto0, c\mapsto0) & \kone & \kzer & \kzer & \kzer & \kone & \kzer & \kzer & \kzer \\
-                (b\mapsto0, c\mapsto1) & \kzer & \kone & \kzer & \kzer & \kzer & \kone & \kzer & \kzer \\
-                (b\mapsto1, c\mapsto0) & \kzer & \kzer & \kone & \kzer & \kzer & \kzer & \kone & \kzer \\
-                (b\mapsto1, c\mapsto1) & \kzer & \kzer & \kzer & \kone & \kzer & \kzer & \kzer & \kone \\
-                (a\mapsto0, c\mapsto0) & \kone & \kzer & \kone & \kzer & \kzer & \kzer & \kzer & \kzer \\
-                (a\mapsto0, c\mapsto1) & \kzer & \kone & \kzer & \kone & \kzer & \kzer & \kzer & \kzer \\
-                (a\mapsto1, c\mapsto0) & \kzer & \kzer & \kzer & \kzer & \kone & \kzer & \kone & \kzer \\
-                (a\mapsto1, c\mapsto1) & \kzer & \kzer & \kzer & \kzer & \kzer & \kone & \kzer & \kone
-            }
-        $}
+        \resizebox{1.0\hsize}{!}{\includegraphics{figures/incidence_matrix_1_example/figure.pdf}}
         \label{eq:incidence_example}
     \end{equation}
 
@@ -81,6 +65,15 @@
 
     \section{An Observation}
     \subsection{An Antecedent Hierarchy}
+    \subsection{The Antecedent Hypergraph}
+    Given an antecedent multi-set $\multiset$ where $\multiset \preceq 0$, we identify the \term{inhibiting set} of joint events $\inhibit{\multiset} \subseteq \events{\jointvar}$ preventing $\multiset \cdot \incidence$ from being positive semi-definite:
+    \[ \inhibit{\multiset} \defined \bc{j \in \events{\jointvar} \mid \sum_{m \in \events{\mscenariowrap}} \multiset^{m} \incidence^{j}_{m} < 0} \]
+    The inhibiting set $\inhibit{\multiset}$ of $\multiset$ completely characterizes the \term{antecedent hypergraph} $\hypergraph\br{\multiset}$ whose edges $\edges_{j}$ are indexed by the inhibiting events $j \in \inhibit{\multiset}$. Each edge $\edges_{j} \subseteq \events{\mscenariowrap}$ corresponds to the set of the marginal events $m \in \events{\mscenariowrap}$ which are restrictions of $j$. Specifically,
+    \begin{gather*}
+        \hypergraph\br{\multiset} \defined \bc{\edges_j \mid j \in \inhibit{\multiset}} \\
+        \edges_{j} \defined \bc{m \in \events{\mscenariowrap} \mid m = \restrict{j}{\domain{m}}, \multiset^{m} = 0}
+    \end{gather*}
+
     \subsection{Irreducibility}
     \subsection{Marginal Symmetries}
     \label{sec:marginal_symmetries}
@@ -88,8 +81,15 @@
     \subsection{Targeted Searches}
     \subsection{Relaxations}
 
-    \section{Edge-Weighted Hypergraph Transervals}
+    \section{Edge-Weighted Hypergraph Transversals}
     \subsection{Preliminaries}
+    \begin{center}
+        \begin{figure}
+            \includegraphics[width=\linewidth]{figures/hypergraph_diagram_1_standalone/figure.pdf}
+            \includegraphics[width=0.8\linewidth]{figures/hypergraph_matrix_1_standalone/figure.pdf}
+            \caption{Dual-representations of a hypergraph $\hypergraph = \bc{\edges_1,\edges_2,\edges_3,\edges_4,\edges_5}$.}
+        \end{figure}
+    \end{center}
     \subsection{Hypergraph Transversals}
     \subsection{Adding Weights}
 

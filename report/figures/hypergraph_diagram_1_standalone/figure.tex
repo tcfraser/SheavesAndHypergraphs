@@ -1,0 +1,82 @@
+\documentclass[preview]{standalone}
+
+\usepackage{geometry}
+\geometry{paperwidth=4in, paperheight=2in}
+
+\usepackage{tikz} % For drawing things on graphs
+\usetikzlibrary{calc} % For relative points
+
+\begin{document}
+    \tikzstyle{point}     = [shape=circle, draw, inner sep=1pt, style={text=black, font=\scriptsize}]
+    \tikzstyle{edgelabel} = [shape=circle, draw, fill=white, inner sep=1pt, style={font=\scriptsize}]
+    \tikzstyle{edge}      = [fill, fill opacity=0.2]
+    \pgfdeclarelayer{background}
+    \pgfsetlayers{background,main}
+    \begin{tikzpicture}
+        \pgfmathsetmacro{\rr}{0.3}; % radius for edges
+        \pgfmathsetmacro{\st}{1.41}; % sqrt two
+
+        \coordinate (w) at (-\rr,+0);
+        \coordinate (e) at (+\rr,+0);
+        \coordinate (n) at (+0,+\rr);
+        \coordinate (s) at (+0,-\rr);
+
+        \coordinate (nw) at (-\rr/\st,+\rr/\st);
+        \coordinate (ne) at (+\rr/\st,+\rr/\st);
+        \coordinate (sw) at (-\rr/\st,-\rr/\st);
+        \coordinate (se) at (+\rr/\st,-\rr/\st);
+
+        \begin{scope}[scale=1.2]
+            \draw (0, 0) node[point](n1){$n_1$};
+            \draw (0, 1) node[point](n2){$n_2$};
+            \draw (1, 0) node[point](n3){$n_3$};
+            \draw (1, 1) node[point](n4){$n_4$};
+            \draw (2, 0) node[point](n5){$n_5$};
+            \draw (2, 1) node[point](n6){$n_6$};
+            \draw (3, 0) node[point](n7){$n_7$};
+        \end{scope}
+        \begin{pgfonlayer}{background}
+        \draw[edge, blue]
+            ($(n1)+(nw)$) to
+            ($(n4)+(nw)$) to[out=45, in=135]
+            ($(n4)+(ne)$) to
+            ($(n5)+(ne)$) to[out=-45, in=0, distance=8]
+            ($(n5)+(s)$) to
+            ($(n1)+(s)$) to[out=180, in=-135, distance=8]
+            cycle;
+        \draw ($0.5*(n1)+0.5*(n3)+(s)$) node[blue, edgelabel]{$\mathcal{E}_1$};
+        \draw[edge, red]
+            ($(n5)+(s)$) to[out=180, in=270]
+            ($(n5)+(w)$) to
+            ($(n6)+(w)$) to[out=90, in=135, distance=8]
+            ($(n6)+(ne)$) to ($(n7)+(ne)$) to[out=-45, in=0, distance=8]
+            ($(n7)+(s)$) to
+            cycle;
+        \draw ($0.5*(n5)+0.5*(n7)+(s)$) node[red, edgelabel]{$\mathcal{E}_2$};
+        \draw[edge, green]
+            ($(n1)+(e)$) to[out=-90, in=-90, distance=12]
+            ($(n1)+(w)$) to
+            ($(n2)+(w)$) to[out=90, in=90, distance=12]
+            ($(n2)+(e)$) to
+            cycle;
+        \draw ($0.5*(n1)+0.5*(n2)+(w)$) node[green, edgelabel]{$\mathcal{E}_3$};
+        \draw[edge, yellow]
+            ($(n3)+(nw)$) to[out=-135, in=-135, distance=12]
+            ($(n3)+(se)$) to
+            ($(n6)+(se)$) to[out=45, in=45, distance=12]
+            ($(n6)+(nw)$) to
+            cycle;
+        \draw ($0.65*(n3)+0.35*(n6)+(nw)$) node[yellow, edgelabel]{$\mathcal{E}_4$};
+        \draw[edge, orange]
+            ($(n2)+(s)$) to[out=180, in=180, distance=12]
+            ($(n2)+(n)$) to
+            ($(n4)+(n)$) to[out=0, in=0, distance=12]
+            ($(n4)+(s)$) to
+            cycle;
+        \draw ($0.5*(n2)+0.5*(n4)+(n)$) node[orange, edgelabel]{$\mathcal{E}_5$};
+
+        \end{pgfonlayer}
+
+        % \draw[red] plot [smooth cycle, tension=0.2] coordinates {($(n5)+(s)$) ($(n5)+(w)$) ($(n6)+(w)$) ($(n6)+(ne)$) ($(n7)+(ne)$) ($(n7)+(s)$) };
+    \end{tikzpicture}
+\end{document}

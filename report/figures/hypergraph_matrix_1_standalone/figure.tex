@@ -1,0 +1,28 @@
+\documentclass[preview]{standalone}
+
+\usepackage{geometry}
+\geometry{paperwidth=4in, paperheight=2in}
+
+% === To allow for labeling of rows and columns of a matrix ===
+\usepackage{../../packages/kbordermatrix}
+\renewcommand{\kbldelim}{(} % Left delimiter
+\renewcommand{\kbrdelim}{)} % Right delimiter
+
+\usepackage{xcolor}
+\newcommand{\kone}{\mathbf{1}}
+\newcommand{\kzer}{\textcolor{gray}{0}}
+
+\begin{document}
+$
+\kbordermatrix{
+    & \textcolor{blue}{\mathcal{E}_1} & \textcolor{red}{\mathcal{E}_2} & \textcolor{green}{\mathcal{E}_3} & \textcolor{yellow}{\mathcal{E}_4} & \textcolor{orange}{\mathcal{E}_5} \\
+    n_1 & \kone & \kzer & \kone & \kzer & \kzer \\
+    n_2 & \kzer & \kzer & \kone & \kzer & \kone \\
+    n_3 & \kone & \kzer & \kzer & \kone & \kzer \\
+    n_4 & \kone & \kzer & \kzer & \kzer & \kone \\
+    n_5 & \kone & \kone & \kzer & \kzer & \kzer \\
+    n_6 & \kzer & \kone & \kzer & \kone & \kzer \\
+    n_7 & \kzer & \kone & \kzer & \kzer & \kzer \\
+}
+$
+\end{document}

@@ -2,12 +2,6 @@
 % === These macros are relevant to all of the documents ===
 % =========================================================
 
-% === To allow for labeling of rows and columns of a matrix ===
-%\usepackage{kbordermatrix}
-\usepackage{packages/kbordermatrix}
-\renewcommand{\kbldelim}{(} % Left delimiter
-\renewcommand{\kbrdelim}{)} % Right delimiter
-
 % === Commonly re-occurring symbols ===
 \newcommand{\hgraph}{\mathcal{H}}
 \newcommand{\graph}{\mathcal{G}}
@@ -16,7 +10,7 @@
 \newcommand{\edges}{\mathcal{E}}
 \newcommand{\trans}{\mathcal{T}}
 \newcommand{\ind}{S}
-\newcommand{\inhibit}{\mathcal{I}}
+% \newcommand{\inhibit}{\mathcal{I}}
 \newcommand{\netperm}{\Pi}
 \newcommand{\Hilb}{\mathcal{H}}
 \newcommand{\indep}{\perp\!\!\!\perp}
@@ -36,8 +30,6 @@
 % \newcommand{\mset}{\gamma}
 % \newcommand{\extmset}{\Gamma}
 \newcommand{\supp}[1]{\si\br{#1}}
-\newcommand{\kone}{\mathbf{1}}
-\newcommand{\kzer}{\textcolor{gray}{0}}
 
 \newcommand{\probplotvalue}[1]{%
     \definecolor{probvalcolor}{RGB}{#1}%
@@ -88,6 +80,9 @@
 \newcommand{\restrict}[2]{{#1}|_{#2}} % Restriction
 \newcommand{\incidence}{\mathcal{M}} % Incidence matrix
 \newcommand{\probset}[1]{\mathcal{P}_{#1}} % probsets
+\newcommand{\multiset}{\gamma} % multisets of integers choices for algebraic probability terms
+\newcommand{\hypergraph}{\mathcal{H}} %
+\newcommand{\inhibit}[1]{\mathcal{I}\br{#1}} % inhibiting set
 % \setoperator{Dom} % Domian
 % \setoperator{Dom} % Domian
 
