@@ -2,7 +2,6 @@
 \documentclass[aps, 10pt, english, twoside, twocolumn, pra, nofootinbib, tightenlines, longbibliography, superscriptaddress]{revtex4-1}
 
 % === All of the Packages I use frequently ===
-\usepackage{packages/document_config}
 \usepackage{packages/shared}
 \usepackage{packages/misc_commands}
 
@@ -33,19 +32,22 @@
 
     For every $V' \subset V$ and $\w \in \events{V}$, the \term{restriction of $\w$ onto $V'$} (denoted $\restrict{\w}{V'}$) corresponds to the unique event in $\events{V'}$ that agrees with $\w$ for all valuations of variables in $V'$, i.e. $\forall v' \in V': \restrict{\w}{V'}\br{v'} = \w\br{v'}$. Using this notational framework, a probability distribution or simply \term{distribution} $\prob{V}$ is a probability measure on $\events{V}$, assigning to each $\w \in \events{V}$ a real number $\prob{V}\br{\w} \in \bs{0,1}$ such that $\sum_{\w \in \events{V}} \prob{V}\br{\w} = 1$. The set of all distributions over $\events{V}$ is denoted $\probset{V}$. Moreover, given $\prob{V} \in \probset{V}$ and $V' \subset V$, there is an induced distribution $\restrict{\prob{V}}{V'} \in \probset{V'}$ obtained by \textit{marginalizing} $\prob{V}$:
     \[ \restrict{\prob{V}}{V'}\br{\w'} = \sum_{\substack{\w \in \events{V} \\ \restrict{\w}{V'} = \w'}} \prob{V}\br{\w} \eq \label{eq:marginalization_defined} \]
-    Presently, the reader is equipped with sufficient notation and terminology to comprehend the \term{marginal (satisfiability) problem}: given a collection of $m$ distributions $\bc{\prob{V_1},\ldots,\prob{V_m}}$, does there exist a distribution $\prob{\jointvar} \in \probset{\jointvar}$ where $\jointvar \defined \bigcup_{i = 1}^{m} V_m$ such that $\forall i : \restrict{\prob{\jointvar}}{V_i} = \prob{V_i}$?
+    Presently, the reader is equipped with sufficient notation and terminology to comprehend the marginal problem.
+    \begin{definition}
+        \term{The Marginal Problem}: Given a collection of $m$ distributions $\bc{\prob{V_1},\ldots,\prob{V_m}}$, does there exist a distribution $\prob{\jointvar} \in \probset{\jointvar}$ with $\jointvar \defined \bigcup_{i = 1}^{m} V_m$ such that $\forall i : \restrict{\prob{\jointvar}}{V_i} = \prob{V_i}$?
+    \end{definition}
 
-    To facilitate further discussion of this problem, several pieces of nomenclature will be introduced. First, the set $\mscenario = \bc{V_1, \ldots, V_m}$ is called the \term{marginal scenario} while its elements are called the \term{marginal contexts}. The collection of distributions $\prob{\mscenariowrap} \defined \bc{\prob{V_1},\ldots,\prob{V_m}}$\footnote{The subscript $*$ preceding $\mscenariowrap$ is added for clarity; $\prob{\mscenariowrap}$ is \textit{not} a distribution but a set of distributions over $\mscenario$. The $\mscenariowrap$ convention is adopted throughout this report.} is called the \term{marginal model}~\cite{Fritz_2011}\footnote{In~\cite{Abramsky_2011}, $\prob{\mscenariowrap}$ is instead called an \textit{empirical model}.}. The distribution $\prob{\jointvar}$, if it exists, is termed the \term{joint distribution}. Strictly speaking, as defined by~\cite{Fritz_2011}, a marginal scenario forms an \textit{abstract simplicial complex}, meaning it satisfies the supplementary required that all subsets of contexts are also contexts, i.e. $\forall V \in \mscenario : V' \subset V \implies V' \in \mscenario$. Throughout this work, we exclusively consider (without loss of generality) \textit{maximal} marginal scenarios, restricting our focus to the contexts which are contained in no others. Finally, a marginal model $\prob{\mscenariowrap}$ is said to be \term{contextual}, and will be denoted $\prob{\mscenariowrap} \in \contextual \subseteq \probset{\mscenariowrap}$ if it does not admit a joint distribution and \term{non-contextual} otherwise ($\prob{\mscenariowrap} \not \in \contextual$). Equipped with additional terminology and notation, the marginal problem now reads: given $\prob{\mscenariowrap}$, is $\prob{\mscenariowrap} \in \noncontextual$ or not?
+    To facilitate further discussion of this problem, several pieces of nomenclature will be introduced. First, the set $\mscenario = \bc{V_1, \ldots, V_m}$ is called the \term{marginal scenario} while its elements are called the \term{marginal contexts}. The collection of distributions $\prob{\mscenariowrap} \defined \bc{\prob{V_1},\ldots,\prob{V_m}}$\footnote{The subscript $*$ preceding $\mscenariowrap$ is added for clarity; $\prob{\mscenariowrap}$ is \textit{not} a distribution but a set of distributions over $\mscenario$. The $\mscenariowrap$ convention is adopted throughout this report.} is called the \term{marginal model}~\cite{Fritz_2011}\footnote{In~\cite{Abramsky_2011}, $\prob{\mscenariowrap}$ is instead called an \textit{empirical model}.}. The distribution $\prob{\jointvar}$, if it exists, is termed the \term{joint distribution}. Strictly speaking, as defined by~\cite{Fritz_2011}, a marginal scenario forms an \textit{abstract simplicial complex}, meaning it satisfies the supplementary requirement that all subsets of contexts are also contexts, i.e. $\forall V \in \mscenario : V' \subset V \implies V' \in \mscenario$. Throughout this work, we exclusively consider (without loss of generality) \textit{maximal} marginal scenarios, restricting our focus to the contexts which are contained in no others. Finally, a marginal model $\prob{\mscenariowrap}$ is said to be \term{non-contextual}, and will be denoted $\prob{\mscenariowrap} \in \noncontextual \subseteq \probset{\mscenariowrap}$ if it admits a joint distribution and \term{contextual} otherwise ($\prob{\mscenariowrap} \in \contextual$). Equipped with this additional terminology and notation, the marginal problem now reads: given $\prob{\mscenariowrap}$, is $\prob{\mscenariowrap} \in \noncontextual$ or not?
 
     \subsection{Linearity}
-    An essential feature of the marginal problem is linearity; the marginalization of $\prob{\jointvar}$ onto the marginal contexts $\bc{\restrict{\prob{\jointvar}}{V} \mid V \in \mscenario}$ is a linear transformation, requiring only the summations pursuant to \cref{eq:marginalization_defined}. Consequently, it is advantageous to consider the statement of the marginal problem as a matrix multiplication. To this end, for each marginal scenario $\mscenario$ we define a bitwise matrix $\incidence$ called the \term{incidence matrix} which implements this mapping. The columns of $\incidence$ are indexed by \textit{joint events} $j \in \events{\jointvar}$ and the rows are indexed by \textit{marginal events} $m \in \events{V}$ for some $V \in \mscenario$. By deliberate abuse of notation, we will denote the set of all marginal events as $\events{\mscenariowrap}$ and is defined as the following disjoint union:
+    An essential feature of the marginal problem is linearity; the marginalization of $\prob{\jointvar}$ onto the marginal contexts $\bc{\restrict{\prob{\jointvar}}{V} \mid V \in \mscenario}$ is a linear transformation, requiring only the summations pursuant to \cref{eq:marginalization_defined}. Consequently, it is advantageous to consider the statement of the marginal problem as a matrix multiplication. To this end, for each marginal scenario $\mscenario$ we define a binary matrix $\incidence$ called the \term{incidence matrix} which implements this mapping. The columns of $\incidence$ are indexed by \textit{joint events} $j \in \events{\jointvar}$ and the rows are indexed by \textit{marginal events} $m \in \events{V}$ for some $V \in \mscenario$. By deliberate abuse of notation, we will denote the set of all marginal events as $\events{\mscenariowrap}$ and is defined as the following disjoint union:
     \[ \events{\mscenariowrap} \defined \coprod_{V \in \mscenario} \events{V} \]
     The $\abs{\events{\mscenariowrap}}\times\abs{\events{\jointvar}}$ incidence matrix $\incidence$ is then defined element-wise for $m \in \events{\mscenariowrap}$ and $j \in \events{\jointvar}$:
     \[ \incidence^{m}_{j} = \begin{cases}
         1 & \restrict{j}{\domain{m}} = m\\
         0 & \text{otherwise}
-    \end{cases} \]
-    Conceptually, the entries of this matrix are populated with ones whenever the marginal event (row) $m$ is the restriction of some joint event (column) $j$. For a given marginal scenario $\mscenario$, $\incidence$ represents the tuple of restriction maps $\incidence : \events{\jointvar} \to \prod_{V \in \mscenario} \events{V} :: j \mapsto \bc{\restrict{j}{V} \mid V \in \mscenario}$~\cite{Abramsky_2011}.
+    \end{cases} \eq \label{eq:incidence_matrix} \]
+    Conceptually, the entries of this matrix are populated with ones whenever the marginal event (row) $m$ is the restriction of some joint event (column) $j$. For a given marginal scenario $\mscenario$, $\incidence$ represents the tuple of restriction maps $\incidence : \events{\jointvar} \to \prod_{V \in \mscenario} \events{V} :: j \mapsto \bc{\restrict{j}{V} \mid V \in \mscenario}$~\cite{Abramsky_2011}. Furthermore, note that the component indices of $\incidence$ in \cref{eq:incidence_matrix} are deliberately separated. Among other reasons, this is done to allow one to denote the $m$-th row of $\incidence$ as $\incidence^{m}$ and the $j$-th column as $\incidence_{j}$. For further notational convenience, since $\incidence$ is a binary matrix, we let $\incidence^{m}$ and $\incidence_{j}$ analogously correspond their respective \textit{supports}\footnote{The \textit{support} $\supp{f}$ of a mapping $f$ is the subset of its domain $\domain{f}$ that is not mapped to a zero element: $\supp{f} = \bc{x \in \domain{f} \mid f\br{x} \neq 0}$.}, e.g. $m \in \supp{\incidence_{j}}$ if and only if $\incidence_{j}^{m} = 1$. Throughout the remainder of this report, the utility of the incidence matrix $\incidence$ will be indispensable.
 
     To illustrate this concretely, consider the following example. Let $\jointvar$ be $3$ binary variables $\bc{a,b,c}$ and $\mscenario$ be the marginal scenario $\mscenario = \bc{\bc{a,b}, \bc{b,c}, \bc{a,c}}$. The incidence matrix for $\mscenario$ becomes:
     \begin{equation}
@@ -53,13 +55,47 @@
         \label{eq:incidence_example}
     \end{equation}
 
-    In addition, for any joint distribution $\prob{\jointvar} \in \probset{\jointvar}$ we associate a joint distribution \textit{vector} $\prob{\jointvar}$ (identically denoted) indexed by $j \in \events{\jointvar}$, i.e. $\prob{\jointvar}^{j} \defined \prob{\jointvar}\br{j}$. Analogously, for each marginal model $\prob{\mscenariowrap} \in \probset{\mscenariowrap}$ there is an associated marginal distribution \textit{vector} $\prob{\mscenariowrap}$ indexed by $m \in \events{\mscenariowrap}$ such that $\prob{\mscenariowrap}^{m} \defined \prob{\domain{m}}\br{m}$. Using these vectors, the marginal problem becomes the following linear program: given a marginal distribution vector $\prob{\mscenariowrap}$, does there exist a joint distribution vector $\prob{\jointvar} \succeq 0$ such that \cref{eq:incidence_marginal_problem} holds?
-    \[ \prob{\mscenariowrap} = \incidence \cdot \prob{\jointvar} \iff \prob{\mscenariowrap}^{m} = \sum_{j \in \events{\jointvar}} \incidence^{m}_{j} \prob{\jointvar}^{j} \eq \label{eq:incidence_marginal_problem} \]
+    In addition, for any joint distribution $\prob{\jointvar} \in \probset{\jointvar}$ we associate a joint distribution \textit{vector} $\prob{\jointvar}$ (identically denoted) indexed by $j \in \events{\jointvar}$, i.e. $\prob{\jointvar}^{j} \defined \prob{\jointvar}\br{j}$. Analogously, for each marginal model $\prob{\mscenariowrap} \in \probset{\mscenariowrap}$ there is an associated marginal distribution \textit{vector} $\prob{\mscenariowrap}$ indexed by $m \in \events{\mscenariowrap}$ such that $\prob{\mscenariowrap}^{m} \defined \prob{\domain{m}}\br{m}$. Using these vectors, the marginal problem becomes the following linear program:
 
-    \todo[TC]{Discuss dual linear program, inequalities, general marginal problem etc}
+    \begin{definition}
+        \label{def:MLP}
+        \term{The Marginal Linear Program (MLP)}:
+        \begin{alignat*}{2}
+            & \text{minimize:} \quad&& \emptyset \cdot \prob{\jointvar} \footnotemark\\
+            & \text{subject to:} && \prob{\jointvar} \succeq 0 \\
+            & && \incidence \cdot \prob{\jointvar} = \prob{\mscenariowrap} \eq \label{eq:incidence_marginal_problem}
+        \end{alignat*}
+    \end{definition}
+    \addtocounter{footnote}{-1} % Why do I have to do this? Is it because of the secondary text environment in the alignat?
+    \footnotetext{Note that the primal value of the linear program is of no interest, all that matters is its \textit{feasibility}. Here $\emptyset$ denotes a null vector of all zero entries.} As such, $\prob{\mscenariowrap} \in \noncontextual$ if and only if MLP is a \textit{feasible} linear program. Importantly, if MLP is feasible, it will return the joint distribution $\prob{\jointvar}$. To every linear program, there exists a dual linear program that characterizes the feasibility of the original~\cite{Schrijver_1998}. Constructing the dual linear program is a well-defined procedure~\cite{Lahaie_2008}.
+
+    \begin{definition}
+        \label{def:DMLP}
+        \term{The Dual Marginal Linear Program (DMLP)}:
+        \begin{alignat*}{2}
+            & \text{minimize:} \quad&& \ga \cdot \prob{\mscenariowrap} \\
+            & \text{subject to:} && \ga \cdot \incidence \succeq 0
+        \end{alignat*}
+    \end{definition}
+
+    By construction, DMLP completely determines the whether or not $\prob{\mscenariowrap} \in \noncontextual$ or not. If $\prob{\mscenariowrap} \in \noncontextual$, then MLP is feasible and the following holds,
+    \[ \ga \cdot \prob{\mscenariowrap} = \ga \cdot \br{\incidence \cdot \prob{\jointvar}} \geq 0 \eq \label{eq:dual_program_connection}\]
+    because both $\ga \cdot \incidence \succeq 0$ and $\prob{\jointvar} \succeq 0$. If however, $\ga \cdot \prob{\mscenariowrap} < 0$, then \cref{eq:dual_program_connection} is violated and $\prob{\mscenariowrap} \not \in \noncontextual$\footnote{These observations are collectively a consequence of Farkas's Lemma~\cite{Fang_1993}.}. In summary, the sign of $d \defined \min \br{\ga \cdot \prob{\mscenariowrap}}$ answers the marginal program; $\prob{\mscenariowrap} \in \noncontextual$ if and only if $d \geq 0$\footnote{In particular, if $d \geq 0$, then $d = 0$ due to the existence of the trivial solution $\ga = \emptyset$. This observation is an instance of the \textit{Complementary Slackness Property}~\cite{Bradley_1977}. Alternatively, if $d < 0$, then it is unbounded $d = -\inf$ due to the \textit{Unbounded Property}~\cite{Bradley_1977}.}.
+    \begin{corollary}
+        All linear, homogeneous constraints $\ga \cdot \prob{\mscenariowrap} \geq 0$ constraining non-contextual marginal models $\noncontextual \subseteq \probset{\mscenariowrap}$ satisfy $\ga \cdot \incidence \succeq 0$. Moreover, all vectors $\ga$ satisfying $\ga \cdot \incidence \succeq 0$ correspond to valid constraints $\ga \cdot \prob{\mscenariowrap} \geq 0$ for $\noncontextual \subseteq \probset{\mscenariowrap}$.
+    \end{corollary}
+
+    In light of \cref{def:MLP,def:DMLP}, when supplied with a particular marginal model $\prob{\mscenariowrap}$, the marginal problem can be solved computationally by evaluating DMLP to determine the feasibility of MLP. A more difficult variant of the marginal problem is one wherein no particular marginal model is supplied.
+
+    \begin{definition}
+        \term{The General Marginal Problem (GMP)}: Given a marginal scenario $\mscenario$ find a set of independent constraints $\Ga$ which completely constraint $\noncontextual \subseteq \probset{\mscenariowrap}$; i.e. $\prob{\mscenariowrap} \in \noncontextual$ if and only if it satisfies all constraints in $\Ga$.
+    \end{definition}
+
+    The remainder of this paper is concerned with methods for solving (or partially solving) GMP. Specifically, \cref{sec:marginal_polytopes} discusses existing methods for completely solving GMP and outlines some of their disadvantages. \Cref{sec:logical_contextuality} summarizes an existing method for completely solving a possibilistic variant of GMP. \Cref{sec:marginal_polytopes,sec:logical_contextuality} motivate \cref{sec:an_observation}, wherein a new method for completely solving GMP is presented.
 
     \subsection{Marginal Polytopes}
-    The complete space of marginal models over $\mscenario$ (denoted $\probset{\mscenariowrap}$) can be partitioned into two spaces: the contextual marginal models ($\contextual$) and the non-contextual marginal models ($\noncontextual \defined \probset{\mscenariowrap} \setminus \contextual$). \citet{Pitowsky_1991} demonstrates that $\noncontextual$ forms a \textit{convex} polytope commonly referred to as the \term{marginal polytope} for $\mscenario$. When embedded in $\R^{\abs{\events{\mscenariowrap}}}$, the extremal rays of the marginal polytope correspond to the columns of $\incidence$ which further correspond to all \textit{deterministic} joint distributions $\prob{\jointvar} \in \probset{\jointvar}$\footnote{A deterministic distribution $\prob{\jointvar}$ is a distribution in which a singular event $j \in \events{\jointvar}$ occurs with certainty, i.e. $\prob{\jointvar}^{j} = 1$ and $\forall j' \neq j: \prob{\jointvar}^{j'} = 0$. }. The normalization of $\prob{\jointvar}$ ($\sum_{j} \prob{\jointvar}^{j} = 1$) defines the convexity of the polytope; each marginal model $\prob{\mscenariowrap} \in \probset{\mscenariowrap}$ must be a convex mixture of the deterministic marginal models pursuant to \cref{eq:incidence_marginal_problem}. Consequently, characterizing the contextuality of marginal models is manifestly a problem of polytope description. Notably, the \term{facets} of a marginal polytope correspond to a finite set of linear inequalities that are complete in the sense that all contextual distributions violate at least one facet inequality~\cite{Brunner_2013}. From the perspective of a marginal polytope, convex hull algorithms or linear quantifier elimination can be used to compute a representation of the complete set of linear inequalities and completely solve the marginal problem. A popular tool for linear quantifier elimination is \textit{Fourier-Motzkin elimination} \cite{Dantzig_1973,Inflation,Abramsky_2012,jones_2004}. In this report, we will avoid expounding upon the Fourier-Motzkin procedure and instead recall a few of its notable features and consequences.\footnote{Applying the Fourier-Motzkin procedure to completely solve the marginal problem is discussed in more detail in \citet{Fritz_2011}.}
+    \label{sec:marginal_polytopes}
+    The complete space of marginal models over $\mscenario$ (denoted $\probset{\mscenariowrap}$) can be partitioned into two spaces: the contextual marginal models ($\contextual$) and the non-contextual marginal models ($\noncontextual \defined \probset{\mscenariowrap} \setminus \contextual$). \citet{Pitowsky_1991} demonstrates that $\noncontextual$ forms a \textit{convex} polytope commonly referred to as the \term{marginal polytope} for $\mscenario$. When embedded in $\R^{\abs{\events{\mscenariowrap}}}$, the extremal rays of the marginal polytope correspond to the columns of $\incidence$ which further correspond to all \textit{deterministic} joint distributions $\prob{\jointvar} \in \probset{\jointvar}$\footnote{A deterministic distribution $\prob{\jointvar}$ is a distribution in which a singular event $j \in \events{\jointvar}$ occurs with certainty, i.e. $\prob{\jointvar}^{j} = 1$ and $\forall j' \neq j: \prob{\jointvar}^{j'} = 0$. }. The normalization of $\prob{\jointvar}$ ($\sum_{j} \prob{\jointvar}^{j} = 1$) defines the convexity of the polytope; each marginal model $\prob{\mscenariowrap} \in \probset{\mscenariowrap}$ must be a convex mixture of the deterministic marginal models pursuant to \cref{eq:incidence_marginal_problem}. Consequently, characterizing the contextuality of marginal models is manifestly a problem of polytope description. Notably, the \term{facets} of a marginal polytope correspond to a finite set of linear inequalities that are complete in the sense that all contextual distributions violate at least one facet inequality~\cite{Brunner_2013}. From the perspective of a marginal polytope, convex hull algorithms or linear quantifier elimination can be used to compute a representation of the complete set of facet inequalities and consequently completely solve the GMP. A popular tool for linear quantifier elimination is \textit{Fourier-Motzkin elimination} \cite{Dantzig_1973,Inflation,Abramsky_2012,jones_2004}. In this report, we will avoid expounding upon the Fourier-Motzkin procedure and instead recall a few of its notable features and consequences.\footnote{Applying the Fourier-Motzkin procedure to completely solve GMP is discussed in more detail in \citet{Fritz_2011}.}
 
     \begin{definition} \cite[Section 12.2]{Schrijver_1998}
         Given a system of linear inequality constraints $\s S = \bc{A \cdot x \leq b}$ constraining some free variables $x$, the \term{Fourier-Motzkin elimination} procedure eliminates some of the variables in $x$ and returns a system of linear inequality constraints $\s S' = \bc{A' \cdot x' \leq b'}$ over $x' \subset x$ such that any solution $x'$ of $\s S'$ will permit at least one compatible solution $x$ of $\s S$ (and vice versa).
@@ -81,7 +117,7 @@
 
     \begin{lemma}\footnote{This is a stronger variant of~\cite[Proposition 7]{Abramsky_2012}.}
         \label{lem:homogeneitity}
-        There exists a finite set of integral vectors $\Ga = \bc{\ga_1, \ldots, \ga_q}$ such that for all $\prob{\mscenariowrap} \in \probset{\mscenariowrap}$:
+        There exists a finite set of integral vectors $\Ga$ such that for all $\prob{\mscenariowrap} \in \probset{\mscenariowrap}$:
         \[ \prob{\mscenariowrap} \in \noncontextual \iff \forall \ga \in \Ga : \ga \cdot \prob{\mscenariowrap}  \geq 0 \eq \label{eq:homogeneitity_lemma} \]
     \end{lemma}
 
@@ -94,20 +130,46 @@
     % An excellent survey of existing techniques for solving the marginal problem including Equality Set Projection~\cite{jones_2004} and Hardy-type hypergraph transversals can be found in \citet{Inflation}.
 
     \subsection{Logical Contextuality}
+    \label{sec:logical_contextuality}
     Let $a \in \events{\mscenariowrap}$ be \textit{any} marginal event and $C = \bc{c_1, \ldots, c_n} \subseteq \events{\mscenariowrap}$ be a subset of marginal events such that the following logical implication holds for \textit{all} marginal models $\prob{\mscenariowrap} \in \probset{\mscenariowrap}$:
     \[ a \implies c_1 \vee \cdots \vee c_n = \bigvee_{c \in C} c \eq \label{eq:hardy_logical_implication} \]
     Which can be dictated: \textit{whenever the event $a$ occurs, at least one event in $C$ occurs.} In accordance with the logical form of \cref{eq:hardy_logical_implication}, $a$ will be referred to as the \term{antecedent} and $C$ as the \term{consequent set}. To clarify, a marginal model $\prob{\mscenariowrap} \in \probset{\mscenariowrap}$ satisfies \cref{eq:hardy_logical_implication} if there always at least one $c \in C$ that is \textit{possible} ($\prob{\mscenariowrap}^{c} > 0$) whenever $a$ is possible. A marginal model violates \cref{eq:hardy_logical_implication} whenever \textit{none} of events in $c$ are possible while $a$ remains possible. Marginal models that violate logical statements such as \cref{eq:hardy_logical_implication} are known as \term{Hardy Paradoxes}~\cite{Inflation,Mansfield_2012,Mancinska_2014}. Motivated by a greater sense of robustness compared to possibilistic constraints, the concept of witnessing quantum contextuality on a logical level has be analyzed thoroughly for decades~\cite{Abramsky_2012,Greenberger_1990}.
 
+    All logical implications of the form of \cref{eq:hardy_logical_implication} can be derived by first selecting am antecedent marginal event $a$, then constructing a consequent set $C$ such that \cref{eq:hardy_logical_implication} holds. This is accomplished by making use of \cref{lem:implication_lemma}.
+
+    \begin{lemma}
+        \label{lem:implication_lemma}
+        Let $m \in \events{\mscenariowrap}$ be a marginal event. Then for all non-contextual marginal models $\prob{\mscenariowrap} \in \noncontextual$,
+        \[ m \iff \bigvee_{j \in \supp{\incidence^{m}}} j \]
+    \end{lemma}
+    Essentially, if a joint distribution does exist ($\prob{\mscenariowrap} \in \noncontextual$), then event $m$ represents partial knowledge of the entire system of variables $\jointvar$; whenever $m$ occurs, exactly one joint event $j$ has occurred in reality and $m$ must be a restriction of $j$. Applying \cref{lem:implication_lemma} to the antecedent $a \in \events{\mscenariowrap}$ and consequent set $C \subseteq \events{\mscenariowrap}$,
+    \begin{align*}
+    \eq \label{eq:implication_duo}
+    \begin{split}
+        a &\iff \bigvee_{j \in \supp{\incidence^{a}}} j \\
+        \bigvee_{c \in C} c &\iff \bigvee_{c \in C} \bigvee_{j \in \supp{\incidence^{c}}} j
+    \end{split}
+    \end{align*}
+    Therefore, if a subset $C$ of $\events{\mscenariowrap}$ (preferably excluding $a$) can be found such that,
+    \[ \supp{\incidence^{a}} \subseteq \bigcup_{c \in C} \supp{\incidence^{c}} \eq \label{eq:extension_cover} \]
+    then \cref{eq:hardy_logical_implication} follows from \cref{eq:implication_duo,eq:extension_cover}.
     \section{An Observation}
+    \label{sec:an_observation}
     \subsection{An Antecedent Hierarchy}
     \subsection{The Antecedent Hypergraph}
     Given an antecedent multi-set $\multiset$ where $\multiset \preceq 0$, we identify the \term{inhibiting set} of joint events $\inhibit{\multiset} \subseteq \events{\jointvar}$ preventing $\multiset \cdot \incidence$ from being positive semi-definite:
-    \[ \inhibit{\multiset} \defined \bc{j \in \events{\jointvar} \mid \sum_{m \in \events{\mscenariowrap}} \multiset^{m} \incidence^{j}_{m} < 0} \]
+    \[ \inhibit{\multiset} \defined \bc{j \in \events{\jointvar} \mid \br{\multiset\cdot\incidence}_{j} < 0} \]
     The inhibiting set $\inhibit{\multiset}$ of $\multiset$ completely characterizes the \term{antecedent hypergraph} $\hypergraph\br{\multiset}$ whose edges $\edges_{j}$ are indexed by the inhibiting events $j \in \inhibit{\multiset}$. Each edge $\edges_{j} \subseteq \events{\mscenariowrap}$ corresponds to the set of the marginal events $m \in \events{\mscenariowrap}$ which are restrictions of $j$. Specifically,
     \begin{gather*}
         \hypergraph\br{\multiset} \defined \bc{\edges_j \mid j \in \inhibit{\multiset}} \\
-        \edges_{j} \defined \bc{m \in \events{\mscenariowrap} \mid m = \restrict{j}{\domain{m}}, \multiset^{m} = 0}
+        \edges_{j} \defined \bc{m \in \events{\mscenariowrap} \mid m = \restrict{j}{\domain{m}}, \multiset_{m} = 0}
     \end{gather*}
+
+    \todo[TC]{Incorporate weights}
+    \[ \weight\br{\multiset} = \bc{\weight_j = - \br{\multiset\cdot\incidence}_{j} \mid j \in \inhibit{\multiset}} \]
+
+    \todo[TC]{Define set of right-minimal inequalities}
+    \[ I\br{\multiset} = \bc{\br{\multiset + \ti \multiset} \cdot \prob{\mscenariowrap} \geq 0 \mid \ti \multiset \in \transversals{\weight\br{\multiset}}{\hypergraph\br{\multiset}}}\]
 
     \subsection{Irreducibility}
     \subsection{Marginal Symmetries}
@@ -127,6 +189,11 @@
     \end{center}
     \subsection{Hypergraph Transversals}
     \subsection{Adding Weights}
+
+    \subsection{Unsolved}
+    Consider $\multiset_{1}, \multiset_{2}$ and $\multiset_{1} + \multiset_{2}$.
+    \[ I\br{\multiset_a} = \bc{\br{\multiset_{a} + \ti \multiset_{a}} \cdot \prob{\mscenariowrap} \geq 0 \mid \ti \multiset_{a} \in \transversals{\weight\br{\multiset_a}}{\hypergraph\br{\multiset_a}}} \quad a = 1,2 \]
+    \[ I\br{\multiset_1 + \multiset_2} = \bc{\br{\multiset_{1} + \multiset_{2} + \ti \multiset_{12}} \cdot \prob{\mscenariowrap} \geq 0 \mid \ti \multiset_{12} \in \transversals{\weight\br{\multiset_1}+\weight\br{\multiset_2}}{\hypergraph\br{\multiset_1 + \multiset_2}}} \]
 
     \section{Conclusions}
     \section*{Acknowledgments}
