@@ -97,6 +97,7 @@
     \label{sec:marginal_polytopes}
     The complete space of marginal models over $\mscenario$ (denoted $\probset{\mscenariowrap}$) can be partitioned into two spaces: the contextual marginal models ($\contextual$) and the non-contextual marginal models ($\noncontextual \defined \probset{\mscenariowrap} \setminus \contextual$). \citet{Pitowsky_1991} demonstrates that $\noncontextual$ forms a \textit{convex} polytope commonly referred to as the \term{marginal polytope} for $\mscenario$. When embedded in $\R^{\abs{\events{\mscenariowrap}}}$, the extremal rays of the marginal polytope correspond to the columns of $\incidence$ which further correspond to all \textit{deterministic} joint distributions $\prob{\jointvar} \in \probset{\jointvar}$\footnote{A deterministic distribution $\prob{\jointvar}$ is a distribution in which a singular event $j \in \events{\jointvar}$ occurs with certainty, i.e. $\prob{\jointvar}^{j} = 1$ and $\forall j' \neq j: \prob{\jointvar}^{j'} = 0$. }. The normalization of $\prob{\jointvar}$ ($\sum_{j} \prob{\jointvar}^{j} = 1$) defines the convexity of the polytope; each marginal model $\prob{\mscenariowrap} \in \probset{\mscenariowrap}$ must be a convex mixture of the deterministic marginal models pursuant to \cref{eq:incidence_marginal_problem}. Consequently, characterizing the contextuality of marginal models is manifestly a problem of polytope description. Notably, the \term{facets} of a marginal polytope correspond to a finite set of linear inequalities that are complete in the sense that all contextual distributions violate at least one facet inequality~\cite{Brunner_2013}. From the perspective of a marginal polytope, convex hull algorithms or linear quantifier elimination can be used to compute a representation of the complete set of facet inequalities and consequently completely solve the GMP. A popular tool for linear quantifier elimination is \textit{Fourier-Motzkin elimination} \cite{Dantzig_1973,Inflation,Abramsky_2012,jones_2004}. In this report, we will avoid expounding upon the Fourier-Motzkin procedure and instead recall a few of its notable features and consequences.\footnote{Applying the Fourier-Motzkin procedure to completely solve GMP is discussed in more detail in \citet{Fritz_2011}.}
 
+
     \begin{definition} \cite[Section 12.2]{Schrijver_1998}
         Given a system of linear inequality constraints $\s S = \bc{A \cdot x \leq b}$ constraining some free variables $x$, the \term{Fourier-Motzkin elimination} procedure eliminates some of the variables in $x$ and returns a system of linear inequality constraints $\s S' = \bc{A' \cdot x' \leq b'}$ over $x' \subset x$ such that any solution $x'$ of $\s S'$ will permit at least one compatible solution $x$ of $\s S$ (and vice versa).
         \[ \exists x' : A' \cdot x' \leq b' \iff \exists x : A \cdot x \leq b \eq \label{eq:fourier_motzkin_gaurantee} \]
@@ -153,6 +154,13 @@
     Therefore, if a subset $C$ of $\events{\mscenariowrap}$ (preferably excluding $a$) can be found such that,
     \[ \supp{\incidence^{a}} \subseteq \bigcup_{c \in C} \supp{\incidence^{c}} \eq \label{eq:extension_cover} \]
     then \cref{eq:hardy_logical_implication} follows from \cref{eq:implication_duo,eq:extension_cover}.
+
+    It is possible to show that for each logical constraint of the form \cref{eq:hardy_logical_implication}, there exists a corresponding probabilistic constraint that is tighter. \cref{lem:implication_lemma_probabilistic}\footnote{\cref{lem:implication_lemma_probabilistic} is simply the $m$-th row of \cref{eq:incidence_marginal_problem}.} generalizes \cref{lem:implication_lemma}.
+    \begin{corollary}
+        \label{lem:implication_lemma_probabilistic}
+        Let $m \in \events{\mscenariowrap}$ be a marginal event. Then for all non-contextual marginal models $\prob{\mscenariowrap} \in \noncontextual$,
+        \[ \prob{\mscenariowrap}^m = \sum_{j \in \supp{\incidence^{m}}} \prob{\jointvar}^j \]
+    \end{corollary}
     \section{An Observation}
     \label{sec:an_observation}
     \subsection{An Antecedent Hierarchy}
