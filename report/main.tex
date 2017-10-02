@@ -6,14 +6,14 @@
 \usepackage{packages/misc_commands}
 
 \begin{document}
-    \title{Edge-Weighted Hypergraph Transversals \& Contextuality}
+    \title{
+    Weighted-Hypergraph Transversals:
+    A Practical Approach to Non-Contextuality Inequalities
+    }
     \author{Thomas C. Fraser}
     \email{tcfraser@tcfraser.com}
     \affiliation{Perimeter Institute for Theoretical Physics, Waterloo, Ontario, Canada, N2L 2Y5}
     \affiliation{University of Waterloo, Waterloo, Ontario, Canada, N2L 3G1}
-    % \author{Elie Wolfe}
-    % \affiliation{Perimeter Institute for Theoretical Physics, Waterloo, Ontario, Canada, N2L 2Y5}
-    % \email{ewolfe@perimeterinstitute.ca}
     \date{\today}
     \begin{abstract}
         This is the abstract.
@@ -165,19 +165,19 @@
     \label{sec:an_observation}
     \subsection{An Antecedent Hierarchy}
     \subsection{The Antecedent Hypergraph}
-    Given an antecedent multi-set $\multiset$ where $\multiset \preceq 0$, we identify the \term{inhibiting set} of joint events $\inhibit{\multiset} \subseteq \events{\jointvar}$ preventing $\multiset \cdot \incidence$ from being positive semi-definite:
-    \[ \inhibit{\multiset} \defined \bc{j \in \events{\jointvar} \mid \br{\multiset\cdot\incidence}_{j} < 0} \]
-    The inhibiting set $\inhibit{\multiset}$ of $\multiset$ completely characterizes the \term{antecedent hypergraph} $\hypergraph\br{\multiset}$ whose edges $\edges_{j}$ are indexed by the inhibiting events $j \in \inhibit{\multiset}$. Each edge $\edges_{j} \subseteq \events{\mscenariowrap}$ corresponds to the set of the marginal events $m \in \events{\mscenariowrap}$ which are restrictions of $j$. Specifically,
+    Given an antecedent multi-set $\ga$ where $\ga \preceq 0$, we identify the \term{inhibiting set} of joint events $\inhibit{\ga} \subseteq \events{\jointvar}$ preventing $\ga \cdot \incidence$ from being positive semi-definite:
+    \[ \inhibit{\ga} \defined \bc{j \in \events{\jointvar} \mid \br{\ga\cdot\incidence}_{j} < 0} \]
+    The inhibiting set $\inhibit{\ga}$ of $\ga$ completely characterizes the \term{antecedent hypergraph} $\hypergraph\br{\ga}$ whose edges $\edges_{j}$ are indexed by the inhibiting events $j \in \inhibit{\ga}$. Each edge $\edges_{j} \subseteq \events{\mscenariowrap}$ corresponds to the set of the marginal events $m \in \events{\mscenariowrap}$ which are restrictions of $j$. Specifically,
     \begin{gather*}
-        \hypergraph\br{\multiset} \defined \bc{\edges_j \mid j \in \inhibit{\multiset}} \\
-        \edges_{j} \defined \bc{m \in \events{\mscenariowrap} \mid m = \restrict{j}{\domain{m}}, \multiset_{m} = 0}
+        \hypergraph\br{\ga} \defined \bc{\edges_j \mid j \in \inhibit{\ga}} \\
+        \edges_{j} \defined \bc{m \in \events{\mscenariowrap} \mid m = \restrict{j}{\domain{m}}, \ga_{m} = 0}
     \end{gather*}
 
     \todo[TC]{Incorporate weights}
-    \[ \weight\br{\multiset} = \bc{\weight_j = - \br{\multiset\cdot\incidence}_{j} \mid j \in \inhibit{\multiset}} \]
+    \[ \w\br{\ga} = \bc{\w_j = - \br{\ga\cdot\incidence}_{j} \mid j \in \inhibit{\ga}} \]
 
     \todo[TC]{Define set of right-minimal inequalities}
-    \[ I\br{\multiset} = \bc{\br{\multiset + \ti \multiset} \cdot \prob{\mscenariowrap} \geq 0 \mid \ti \multiset \in \transversals{\weight\br{\multiset}}{\hypergraph\br{\multiset}}}\]
+    \[ I\br{\ga} = \bc{\br{\ga + \ti \ga} \cdot \prob{\mscenariowrap} \geq 0 \mid \ti \ga \in \transversals{\w\br{\ga}}{\hypergraph\br{\ga}}}\]
 
     \subsection{Irreducibility}
     \subsection{Marginal Symmetries}
@@ -196,12 +196,40 @@
         \end{figure}
     \end{center}
     \subsection{Hypergraph Transversals}
+    The space of all positive integer multi-sets over the universe of elements $U$ is denoted $\Z_{\geq 0}^{U}$.
+    \begin{definition}
+        A multi-set $t \in \Z_{\geq 0}^{\s N}$ is a \term{$\w$-super-transversal of $\hypergraph$} if $t \cdot \hypergraph \succeq \w$. A $\w$-transversal $t$ of $\hypergraph$ is \term{minimal} if there does not exist another $\w$-transversal $t'$ of $\hypergraph$ such that $t' \preceq t$. The set of all minimal $\w$-transversals of $\hypergraph$ will be denoted $\transversals{\succeq\w}{\hypergraph}$.
+        \[ \transversals{\succeq\w}{\hypergraph} \defined \min\bc{t \in \Z_{\geq 0}^{\s N} \mid t \cdot \hypergraph \succeq \w} \]
+    \end{definition}
+    Dual to $\w$-super-transversals are \term{$\w$-sub-transversals};
+
+
+    \[ \transversals{\preceq\w}{\hypergraph} \defined \bc{t \mid t \cdot \hypergraph \preceq \w, \not \exists t' \succeq t : t' \cdot \hypergraph \preceq \w } \]
+    \begin{align*}
+    t \cdot \hypergraph \preceq \w
+    &\iff - t \cdot \hypergraph \succeq -\w  \\
+    &\iff k \mathbf{1}_{\nodes} \cdot \hypergraph- t \cdot \hypergraph \succeq k \mathbf{1}_{\nodes} \cdot \hypergraph-\w  \qquad k \defined \max\br{\w}\\
+    &\implies k \mathbf{1}_{\nodes} \cdot \hypergraph - t \cdot \hypergraph \succeq k \mathbf{1}_{\nodes} \cdot \hypergraph-\w \qquad \mathbf{1}_{\nodes} \cdot \hypergraph \succeq \mathbf{1}_{\nodes} \cdot \hypergraph \\
+    &\implies \br{k \mathbf{1}_{\nodes} - t} \cdot \hypergraph \succeq k \mathbf{1}_{\nodes} \cdot \hypergraph-\w
+    \end{align*}
+    \begin{align*}
+    \ti t \in \transversals{\succeq\br{k \mathbf{1}_{\nodes} \cdot \hypergraph-\w}}{\hypergraph}
+    &\implies \ti t \cdot \hypergraph \succeq k \mathbf{1}_{\nodes} \cdot \hypergraph-\w \\
+    &\implies k \mathbf{1}_{\nodes} \cdot \hypergraph - \ti t \cdot \hypergraph \preceq \w \\
+    &\implies k \mathbf{1}_{\nodes} \cdot \hypergraph - \br{k \mathbf{1}_{\nodes} - t} \cdot \hypergraph \preceq \w \\
+    &\implies k \br{\mathbf{1}_{\nodes} \cdot \hypergraph - \mathbf{1}_{\nodes} \cdot \hypergraph} + t \cdot \hypergraph \preceq \w \\
+    &\implies t \cdot \hypergraph \preceq \w
+    \end{align*}
+    If $\ti t$ is minimal, is $t = k \mathbf{1}_{\nodes} - \ti t$? Suppose $t' \succeq t$ was also a transversal,
+    \[ t' \cdot \hypergraph \preceq \w \]
+    \[ \br{k \mathbf{1}_{\nodes} - \ti t'} \cdot \hypergraph \preceq \w \]
+    \[  k \mathbf{1}_{\nodes} \cdot \hypergraph - \ti t' \cdot \hypergraph \preceq \w \]
     \subsection{Adding Weights}
 
     \subsection{Unsolved}
-    Consider $\multiset_{1}, \multiset_{2}$ and $\multiset_{1} + \multiset_{2}$.
-    \[ I\br{\multiset_a} = \bc{\br{\multiset_{a} + \ti \multiset_{a}} \cdot \prob{\mscenariowrap} \geq 0 \mid \ti \multiset_{a} \in \transversals{\weight\br{\multiset_a}}{\hypergraph\br{\multiset_a}}} \quad a = 1,2 \]
-    \[ I\br{\multiset_1 + \multiset_2} = \bc{\br{\multiset_{1} + \multiset_{2} + \ti \multiset_{12}} \cdot \prob{\mscenariowrap} \geq 0 \mid \ti \multiset_{12} \in \transversals{\weight\br{\multiset_1}+\weight\br{\multiset_2}}{\hypergraph\br{\multiset_1 + \multiset_2}}} \]
+    Consider $\ga_{1}, \ga_{2}$ and $\ga_{1} + \ga_{2}$.
+    \[ I\br{\ga_a} = \bc{\br{\ga_{a} + \ti \ga_{a}} \cdot \prob{\mscenariowrap} \geq 0 \mid \ti \ga_{a} \in \transversals{\w\br{\ga_a}}{\hypergraph\br{\ga_a}}} \quad a = 1,2 \]
+    \[ I\br{\ga_1 + \ga_2} = \bc{\br{\ga_{1} + \ga_{2} + \ti \ga_{12}} \cdot \prob{\mscenariowrap} \geq 0 \mid \ti \ga_{12} \in \transversals{\w\br{\ga_1}+\w\br{\ga_2}}{\hypergraph\br{\ga_1 + \ga_2}}} \]
 
     \section{Conclusions}
     \section*{Acknowledgments}
