@@ -7,8 +7,8 @@ def overlap(A, B):
 
         returns (A / B, A & B, B / A)
     """
-    A = np.asarray(A, dtype=OVERLAP_DTYPE)
-    B = np.asarray(B, dtype=OVERLAP_DTYPE)
+    A = np.asarray(A, dtype=DTYPE)
+    B = np.asarray(B, dtype=DTYPE)
 
     # Masks for later selection
     A_minus_B_mask = np.ones(A.size, dtype='bool')

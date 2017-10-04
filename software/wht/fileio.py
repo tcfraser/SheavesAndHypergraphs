@@ -2,7 +2,7 @@
     Saving and loading methods for hypergraphs
 """
 import numpy as np
-from .hypergraph import Hypergraph
+# from .hypergraph import Hypergraph
 
 def save_hypergraph(filename, h):
     np.savez(filename, indices=h.indices, indptr=h.indptr)

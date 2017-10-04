@@ -1,6 +1,12 @@
 from itertools import combinations
 import numpy as np
 
+def inv(perm):
+    inverse = [0] * len(perm)
+    for i, p in enumerate(perm):
+        inverse[p] = i
+    return inverse
+
 def partitions(n, k):
     """
         Generates all arrays of k non-negative integers that sum to n

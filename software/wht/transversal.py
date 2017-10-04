@@ -1,164 +1,89 @@
-from .hypergraph import Hypergraph, dualize
-from .partial_sparse import PartialSparseVector
 from .overlap import overlap
 from .config import *
+from .gnr import *
 from .combinatorics import restricted_partitions, partitions
+from scipy import sparse as sp
 import numpy as np
 
-class Transversal(PartialSparseVector):
+def gdot(t, H, gn):
+    # First convert t to a transversal over the representatives of H
+    rep_indices = np.fromiter((gn[i][0] for i in t.indices), dtype=DTYPE, count=t.indices.size)
 
-    def __init__(self, indices, values, shape):
-        super().__init__(indices, values, shape=shape, dtype=TRANSVERSAL_DTYPE)
+    rep = sp.csr_matrix((t.data, rep_indices, t.indptr), shape=(1, H.shape[0]))
+    rep.has_sorted_indices = True
+    return rep * H
 
-α, β, γ, δ = 0, 1, 2, 3 # enumerate the types
-class GeneralizedNodeRelator():
-
-    def __init__(self, orig, dest):
-        """
-            orig : the position of the node in a past set of generalized nodes
-            dest : the position(s) of the node in a future set of generalized nodes
-                   '(s)' includes the case of a γ type relation
-        """
-        self.orig = orig
-        self.dest = dest
-
-    def __repr__(self):
-        if isinstance(self.dest, tuple):
-            return "  orig      : {} \n    dest : {} \n        {}".format(self.orig, self.dest[0], self.dest[1])
-        else:
-            return "  orig      : {} \n    dest : {}".format(self.orig, self.dest)
-
-class GeneralizedNodeRelation():
-
-    def __init__(self, past, next_edge):
-        """
-            Given
-                past      : generalized nodes of previous partial hypergraph
-                next_edge : the next edge E to be added to past
-
-            Computed
-                future    : generalized nodes of next partial hypergraph
-                rel       : (relators) an ordered list between past and future
-        """
-        self.past = past
-        self.future = []
-        _tmp = [[],[],[],[]] # Temporary data storage for self._rel
-        self.rel = [None,None,None,None]
-
-        E = next_edge # just aliasing
-        E_r = E.copy() # Remainder of new edge
-
-        for p, X in enumerate(past):
-            # @Efficiency: E_r is here instead of E because the generalized_nodes are assumed disjoint
-            # @Efficiency: E_r is typically smaller than X. Should always put smaller list first
-            E_minus_X, E_intersect_X, X_minus_E = overlap(E_r, X)
-            E_r = E_minus_X
-
-            if E_intersect_X.size == 0: # X and E disjoint
-                _tmp[α].append((p, len(self.future)))
-                self.future.append(X)
-            elif X_minus_E.size == 0: # X subset of E
-                _tmp[β].append((p, len(self.future)))
-                self.future.append(X)
-            else: # X and E strictly overlap OR E is subset of X
-                _tmp[γ].append((p, len(self.future)))
-                self.future.append(X_minus_E)
-                self.future.append(E_intersect_X)
-
-        if E_r.size > 0: # New nodes were introduced
-            _tmp[δ].append((0, len(self.future))) # Setting orig to 0 for dtype reasons. set to None later
-            self.future.append(E_r)
-
-        for t in (α, β, γ, δ):
-            orig = np.empty(len(_tmp[t]), dtype=HYPERGRAPH_DTYPE) # locations in past
-            dest = np.empty(len(_tmp[t]), dtype=HYPERGRAPH_DTYPE) # locations in future
-            for i, r in enumerate(_tmp[t]):
-                orig[i] = r[0]
-                dest[i] = r[1]
-
-            if t == γ:
-                dest = (dest, np.add(dest, 1))
-            if t == δ:
-                orig = None
-
-            self.rel[t] = GeneralizedNodeRelator(orig, dest)
-
-    def __repr__(self):
-        return "{} :: \n past   = \n {} \n future = \n {} \n rel = \n {}".format(
-            self.__class__.__name__, self.past, self.future, '\n '.join((['α','β','γ','δ'][t] + str(r) for t, r in enumerate(self.rel))))
-
-def generate_γ_offspring(gnr, t, contrib):
+def add_next_hyperedge(H, w, rels, k, t):
     """
-        For nodes of type γ (γ1, γ2), there is a choice for each pair
-        Need to select t[r.orig] elements out of (t[r.dest[0]], t[r.dest[1]])
+        yields t_k
     """
-def compute_t_dot_H(t, H, gn, k = -1):
-    """
-        Given a transversal t over generalized nodes gn of H, compute the multiplication t.H
-        This is simply fast sparse matrix multiplication
+    assert(k < H.shape[1])
+    rel = rels[k]
 
-        t  : the transversal
-        gn : the generalized nodes for H
-        H  : the hypergraph
-        k  : the size of the output extension
-    """
-    if k < 0:
-        k = H.shape[0]
-    T = np.zeros(k, dtype=WEIGHT_DTYPE) # result of t.H
-    for i in range(t.size):
-        rep = gn[i][0] # picks out a representative
-        ext = H.indices[H.indptr[rep]:H.indptr[rep+1]]
+    # Determine manditory members (mm)
+    #   Each X of type α or β need to be kept with the same weight
+    t_data = [t[rel[g].orig].data for g in (α,β,γ)]
 
-        T[ext] += t[i] # effectively generates partial hypergraph dual
-    return T
+    β_contrib = np.sum(t_data[α])
+    γ_contrib_max = np.sum(t_data[γ])
 
-def add_next_hyperedge(H, H_dual, w, gn, t, T, k):
-    """
-        H       : a hypergraph transversed by (trans) w.r.t. (gen_nodes)
-        H_dual  : the hypergraph's dual
-        w       : a weights overcome by (trans).(hypergraph)
-        gn      : the generalized nodes associated with (trans)
-        t       : a (weights)-transversal of (hypergraph)
-        T       : extension of (trans)
-        k       : the hyperedge being added
-    """
-    if k >= H.shape[1]: # there was no edge to add
+    def fu(dest, data): # macro
+        return sp.csr_matrix((data, dest, np.array([0,dest.size], dtype=DTYPE)), shape=(1,len(rel.next)))
+
+    t_k_α = fu(rel[α].dest, t_data[α])
+    t_k_β = fu(rel[β].dest, t_data[β])
+    t_k_m = t_k_α + t_k_β # TODO disjoint sum inefficiency
+
+    if w[0,k] - β_contrib > 0:
+        # will need to perform a number of expensive operations in order to determine how to supplement the offspring
+        # (see the case below where r_w > 0)
+        # locations of the potential contributors
+        loc_contrib = np.concatenate((rel[β].dest, rel[δ].dest, rel[γ].dest[1]))
+        t_ext = (gdot(t, H, rel.prev) - w)[0,:k+1] # TODO inefficiency
+        failure_points = []
+        for index in t.indices:
+            rep = rel.prev[index][0]
+            removal_indices = H.indices[H.indptr[rep]:H.indptr[rep+1]]
+            removal_indices = removal_indices[removal_indices <= k]
+            failure_points.append(overlap(removal_indices, t_ext.indices)[0]) # removal_indices / T.indices
+
+    def generate_γ_offspring(contrib):
+        for γ_choice in restricted_partitions(contrib, t_data[γ]):
+            t_k_γ1 = fu(rel[γ].dest[0], t_data[γ] - γ_choice)
+            t_k_γ2 = fu(rel[γ].dest[1], γ_choice)
+            t_k_γ = t_k_γ1 + t_k_γ2 # TODO can ravel these together # TODO disjoint sum inefficiency
+            t_k = t_k_γ + t_k_m # TODO disjoint sum inefficiency
+            yield t_k
+
+    for γ_contrib in range(γ_contrib_max + 1, - 1, -1): # start with largest contributions and work backwards
+        r_w = w[0,k+1] - β_contrib - γ_contrib # r_w is the remaining weight to be covered
+
+        if r_w <= 0: # Already covered next edge!
+            for offspring in generate_γ_offspring(γ_contrib):
+                yield offspring
+        else: # Have not covered the next edge, need to cover the difference
+            # need to generate appropriate suppliments
+            for supp_values in partitions(r_w, loc_contrib.size):
+                supp = fu(loc_contrib, supp_values)
+                supp_ext = gdot(supp, H, rel.next)[0,:k+1] # TODO inefficiency
+                appropriate = True
+                for fp in failure_points:
+                    if supp_ext[fp].nnz >= fp.size:
+                        # The suppliment makes a previous node redundant
+                        appropriate = False
+                        break
+                if appropriate:
+                    for offspring in generate_γ_offspring(γ_contrib):
+                        yield supp + offspring
+                else:
+                    pass # TODO solve the hierarchy problem for partition inclusion
+
+def _transversal_worker(H, w, rels, k, t):
+    if k == H.shape[1]:
         yield t
-    else: # otherwise continue as normal
-        gnr = GeneralizedNodeRelation(gn, H[k])
-
-        # Determine manditory members (mm)
-        #   Each X of type α or β need to be kept with the same weight
-        blank = np.zeros(len(gnr.future), dtype=TRANSVERSAL_DTYPE) # blank for new transversal
-        mm = blank.copy()
-        mm[gnr.rel[α].dest] = t[gnr.rel[α].orig]
-        mm[gnr.rel[β].dest] = t[gnr.rel[β].orig]
-        β_contrib = np.sum(mm[gnr.rel[β].dest])
-
-        γ_contrib_max = np.sum(t[gnr.rel[γ].orig])
-        if w[k] - β_contrib > 0:
-            # will need to perform a number of expensive operations in order to determine how to supplement the offspring
-            # (see the case below where r_w > 0)
-            # locations of the potential contributors
-            loc_contrib = np.concatenate((gnr.rel[β].dest, gnr.rel[δ].dest, gnr.rel[γ].dest[1]))
-
-        for γ_contrib in range(γ_contrib_max + 1, -1, -1):
-            r_w = w[k] - β_contrib - γ_contrib # r_w is the remaining weight to be covered
-
-            if r_w <= 0: # Already covered next edge!
-                for γ_choice in restricted_partitions(γ_contrib, t[gnr.rel[γ].orig]):
-                    offspring = blank.copy()
-                    offspring[gnr.rel[γ].dest[0]] = t[gnr.rel[γ].orig] - γ_choice
-                    offspring[gnr.rel[γ].dest[1]] = γ_choice
-                    yield from add_next_hyperedge(H, H_dual, w, gnr.future, offspring + mm, np.append(T, β_contrib + γ_contrib), k+1)
-            else: # Have not covered the next edge, need to cover the difference
-                # need to generate appropriate suppliments
-                for suppliment_values in partitions(r_w, loc_contrib.size):
-                    suppliment = blank.copy()
-                    suppliment[loc_contrib] = suppliment_values
-                    print('mm', str(mm))
-                    print('s', str(suppliment))
-                    pass
+    else:
+        for tt in add_next_hyperedge(H, w, rels, k, t):
+            yield from _transversal_worker(H, w, rels, k+1, tt)
 
 def generate_w_transversals(H, w):
     """
@@ -167,19 +92,23 @@ def generate_w_transversals(H, w):
         H : hypergraph
         w : weight vector
     """
-    w = np.asarray(w, dtype=WEIGHT_DTYPE)
-    H_dual = dualize(H) # possible bottleneck for memory
-    if H.shape[1] == 0: # the hypergraph is empty
-        return []
-    else:
-        # need to construct the initial transversal and initial gnr
-        gnr_init = GeneralizedNodeRelation([], H[0])
-        gn_init  = gnr_init.future
-        t_init   = Transversal(np.array([0]), np.array([w[0]]), shape=(1,))
-        T_init   = np.array([w[0]], dtype=WEIGHT_DTYPE)
-        k_init   = 1
+    assert(H.shape[1] != 0), "The hypergraph is empty!"
 
-        transversal_generator = add_next_hyperedge(H, H_dual, w, gn_init, t_init, T_init, k_init)
-        print(list(transversal_generator))
-        return transversal_generator
+    w = sp.csr_matrix(w, dtype=DTYPE)
+    H_csr = H.tocsr()
+    H_csc = H.tocsc()
+
+    rels = Relators(H_csc)
+
+    t_init = sp.csr_matrix(
+        (np.array([w[0,0]], dtype=DTYPE), # data
+         np.array([0],      dtype=DTYPE), # indices
+         np.array([0,1],    dtype=DTYPE))  # indptr
+        , shape=(1,1))
+
+    transversal_generator = _transversal_worker(H, w, rels, 0, t_init)
+    for t in transversal_generator:
+        print(t.todense())
+
+
 
