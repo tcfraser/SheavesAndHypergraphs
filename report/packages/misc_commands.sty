@@ -29,15 +29,8 @@
 % \newcommand{\mset}{\gamma}
 % \newcommand{\extmset}{\Gamma}
 \newcommand{\supp}[1]{\si\br{#1}}
-
-\newcommand{\probplotvalue}[1]{%
-    \definecolor{probvalcolor}{RGB}{#1}%
-    \definecolor{outlinecolor}{RGB}{127, 127, 127}%
-    \begin{tikzpicture}[baseline={([yshift=-.5ex]current bounding box.center)}]%
-        \pgfmathsetmacro{\size}{0.2};%
-        \draw[outlinecolor, fill=probvalcolor] (-\size,-\size) -- (-\size, +\size) -- (+\size, +\size) -- (+\size, -\size) -- cycle;%
-    \end{tikzpicture}%
-}%
+% https://tex.stackexchange.com/questions/232922/a-hack-for-getting-a-capital-weierstrass-p-in-order-to-represent-the-power-set
+\newcommand{\powerset}{\raisebox{.15\baselineskip}{\Large\ensuremath{\wp}}}
 
 % \newcommand{\mext}[1]{E_{#1}}
 % \newcommand{\mul}[1]{\Gamma_{#1}}
@@ -71,7 +64,7 @@
 \setoperator{Aut} % graph automorphism
 \setoperator{Orb} % Group Orbits
 \setoperator{Perm} % Permutation group
-\newcommand{\transversals}[2]{\mathrm{Tr}_{#1}\bs{#2}} % transversals
+\newcommand{\transversals}[2]{\mathrm{Tr}_{#1}\br{#2}} % transversals
 \newcommand{\PermM}[1]{\La_{#1}} % Permutation matrix
 % \setoperator{Out} % Outcome space
 \newcommand{\events}[1]{\Omega\br{#1}} % Set of events

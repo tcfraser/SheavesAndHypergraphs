@@ -1,0 +1,26 @@
+\documentclass[preview]{standalone}
+
+\usepackage{geometry}
+\geometry{paperwidth=4in, paperheight=2in}
+
+% === To allow for labeling of rows and columns of a matrix ===
+\usepackage{../../packages/kbordermatrix}
+
+\usepackage{xcolor}
+\usepackage{ifthen}
+\newcommand{\nf}[1]{\ifthenelse{\equal{#1}{0}}{\textcolor{gray}{0}}{\mathbf{1}}}
+
+\begin{document}
+$
+\kbordermatrix{
+    & \mathcal{E}_1 & \mathcal{E}_2 & \mathcal{E}_3 & \mathcal{E}_4 & \mathcal{E}_5 & \mathcal{E}_6 \\
+    n_1 & \nf{1} & \nf{0} & \nf{0} & \nf{1} & \nf{0} & \nf{0} \\
+    n_2 & \nf{0} & \nf{1} & \nf{1} & \nf{1} & \nf{1} & \nf{0} \\
+    n_3 & \nf{1} & \nf{0} & \nf{0} & \nf{0} & \nf{0} & \nf{1} \\
+    n_4 & \nf{1} & \nf{0} & \nf{0} & \nf{0} & \nf{1} & \nf{0} \\
+    n_5 & \nf{1} & \nf{1} & \nf{0} & \nf{0} & \nf{1} & \nf{1} \\
+    n_6 & \nf{0} & \nf{1} & \nf{1} & \nf{1} & \nf{0} & \nf{1} \\
+    n_7 & \nf{0} & \nf{0} & \nf{1} & \nf{0} & \nf{1} & \nf{0} \\
+}
+$
+\end{document}

@@ -19,6 +19,13 @@ class OrigDestMap():
         """
         self.orig = orig
         self.dest = dest
+        # self.map = {}
+        # if self.orig is not None:
+        #     for i in range(self.orig.size):
+        #         if isinstance(self.dest, tuple):
+        #             self.map[self.orig[i]] = tuple(self.dest[q][i] for q in range(len(self.dest)))
+        #         else:
+        #             self.map[self.orig[i]] = self.dest[i]
 
     def __repr__(self):
         if isinstance(self.dest, tuple):
@@ -73,32 +80,31 @@ class Relator():
         self.next = [_next[i] for i in _next_argsort]
         _next_argsort_inv = inv(_next_argsort)
 
-        for t in (α, β, δ):
-            orig = np.empty(len(_rel[t]), dtype=DTYPE) # locations in prev
-            dest = np.empty(len(_rel[t]), dtype=DTYPE) # locations in next
-            for i, r in enumerate(_rel[t]):
+        for g in (α, β, δ):
+            orig = np.empty(len(_rel[g]), dtype=DTYPE) # locations in prev
+            dest = np.empty(len(_rel[g]), dtype=DTYPE) # locations in next
+            for i, r in enumerate(_rel[g]):
                 orig[i] = r[0]
                 dest[i] = _next_argsort_inv[r[1]]
-            if t == δ: orig = None
-            self._rel[t] = OrigDestMap(orig, dest)
+            if g == δ: orig = None
+            self._rel[g] = OrigDestMap(orig, dest)
 
-        for t in (γ,):
-            orig = np.empty(len(_rel[t]), dtype=DTYPE) # locations in prev
-            dest0 = np.empty(len(_rel[t]), dtype=DTYPE) # locations in next
+        for g in (γ,):
+            orig = np.empty(len(_rel[g]), dtype=DTYPE) # locations in prev
+            dest0 = np.empty(len(_rel[g]), dtype=DTYPE) # locations in next
             dest1 = dest0.copy()
-            for i, r in enumerate(_rel[t]):
+            for i, r in enumerate(_rel[g]):
                 orig[i] = r[0]
                 dest0[i] = _next_argsort_inv[r[1][0]]
                 dest1[i] = _next_argsort_inv[r[1][1]]
-            self._rel[t] = OrigDestMap(orig, (dest0, dest1))
+            self._rel[g] = OrigDestMap(orig, (dest0, dest1))
 
     def __getitem__(self, item):
         return self._rel[item]
 
-
     def __repr__(self):
         return "{} :: \n past   = \n {} \n future = \n {} \n rel = \n {}".format(
-            self.__class__.__name__, self.prev, self.next, '\n '.join((['α','β','γ','δ'][t] + str(r) for t, r in enumerate(self._rel))))
+            self.__class__.__name__, self.prev, self.next, '\n '.join((['α','β','γ','δ'][g] + str(r) for g, r in enumerate(self._rel))))
 
 class Relators():
 

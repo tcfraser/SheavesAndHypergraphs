@@ -1,7 +1,7 @@
 import numpy as np
 from .config import *
 
-def overlap(A, B):
+def overlap(A, B, masks=False):
     """
         Symmetric overlap function that assumes a and b are sorted with unique elements
 
@@ -27,10 +27,11 @@ def overlap(A, B):
         a += add_a
         b += add_b
 
-    A_minus_B = A[A_minus_B_mask]
-    B_minus_A = B[B_minus_A_mask]
+    if masks:
+        return (A_minus_B_mask, B_minus_A_mask)
+    else:
+        A_minus_B = A[A_minus_B_mask]
+        B_minus_A = B[B_minus_A_mask]
 
-    A_intersect_B_mask = np.invert(A_minus_B_mask, out=A_minus_B_mask) # A_minus_B_mask has the right size but is no longer needed
-    A_intersect_B = A[A_intersect_B_mask]
-
-    return (A_minus_B, A_intersect_B, B_minus_A)
+        A_intersect_B = A[np.invert(A_minus_B_mask)]
+        return (A_minus_B, A_intersect_B, B_minus_A)

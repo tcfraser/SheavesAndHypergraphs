@@ -1,0 +1,128 @@
+\documentclass[preview]{standalone}
+
+\usepackage{geometry}
+\geometry{paperwidth=4in, paperheight=2in}
+\usepackage{ifthen}
+
+\usepackage{tikz} % For drawing things on graphs
+\usetikzlibrary{calc} % For relative points
+\usetikzlibrary{decorations.markings} % For arrows halfway
+
+\begin{document}
+
+    \tikzset{alpha/.style={red, densely dashdotted}}
+    \tikzset{beta/.style={blue}}
+    \tikzset{gamma1/.style={green, densely dashdotted}}
+    \tikzset{gamma2/.style={green}}
+    \tikzset{delta/.style={yellow}}
+    \begin{tikzpicture}[scale=0.5]
+        \pgfmathsetmacro{\tabheight}{0.1}
+        \pgfmathsetmacro{\tabangle}{30}
+        \pgfmathsetmacro{\tiersep}{2.5}
+        \pgfmathsetmacro{\tier}{0}
+        \pgfmathsetmacro{\connectpadh}{0.03}
+        \pgfmathsetmacro{\connectpadw}{0.1}
+        % \draw ({-0.25}, {-1}) node[]{$\mathcal{X}_k$};
+        \newcommand{\settier}[1]{
+            \pgfmathsetmacro{\tier}{#1}
+            \draw ({-0.3}, {-\tier*\tiersep}) node[]{$\mathcal{X}_\tier$};
+        }
+        \newcommand{\gnode}[2]{
+            \draw ({#2}, {-\tier*\tiersep}) node[]{$#1$};
+            \draw[gray]
+            ({#2 - 0.5}, {-\tier*\tiersep - 0.5}) --
+            ({#2 + 0.5}, {-\tier*\tiersep - 0.5}) --
+            ({#2 + 0.5}, {-\tier*\tiersep + 0.5}) --
+            ({#2 - 0.5}, {-\tier*\tiersep + 0.5}) --
+            cycle;
+        }
+        \newcommand{\connect}[4]{
+            \ifthenelse{\equal{#1}{delta}}{
+                \coordinate(start) at ({#2}, {-\tier*\tiersep - 0.2*\tiersep - 0.5 - \connectpadh});
+                \coordinate(stop)  at ({#3}, {-\tier*\tiersep - 1.0*\tiersep + 0.5 + \connectpadh});
+            }{
+                \coordinate(start) at ({#2}, {-\tier*\tiersep - 0.0*\tiersep - 0.5 - \connectpadh});
+                \coordinate(stop)  at ({#3}, {-\tier*\tiersep - 1.0*\tiersep + 0.5 + \connectpadh});
+            }
+            \draw[#1, thick, postaction={decorate}, decoration={markings, mark=at position 0.5 with {\arrow{>}}}]
+            (start) to[in=+90, out=-90] (stop);
+            \ifthenelse{\equal{#1}{delta}}{
+                \draw[#1] ($(stop)  + ({+0.5*#4 - \connectpadw}, 0)$) -- ($(stop)  + ({-0.5*#4 + \connectpadw}, 0)$);
+            }{
+                \draw[#1] ($(start) + ({+0.5*#4 - \connectpadw}, 0)$) -- ($(start) + ({-0.5*#4 + \connectpadw}, 0)$);
+                \draw[#1] ($(stop)  + ({+0.5*#4 - \connectpadw}, 0)$) -- ($(stop)  + ({-0.5*#4 + \connectpadw}, 0)$);
+            }
+        }
+        \connect{delta}{7}{7}{4}
+        \settier{1}
+        \gnode{1}{5.5}
+        \gnode{2}{6.5}
+        \gnode{3}{7.5}
+        \gnode{4}{8.5}
+        \connect{gamma1}{6.5}{3.5}{3}
+        \connect{gamma2}{8.5}{7.5}{1}
+        \connect{delta}{10.5}{10.5}{2}
+        \settier{2}
+        \gnode{1}{2.5}
+        \gnode{2}{3.5}
+        \gnode{3}{4.5}
+        \gnode{4}{7.5}
+        \gnode{5}{10}
+        \gnode{6}{11}
+        \connect{alpha}{3.5}{2.5}{3}
+        \connect{alpha}{7.5}{6.5}{1}
+        \connect{beta}{10.5}{9.5}{2}
+        \connect{delta}{12.5}{12.5}{1}
+        \settier{3}
+        \gnode{1}{1.5}
+        \gnode{2}{2.5}
+        \gnode{3}{3.5}
+        \gnode{4}{6.5}
+        \gnode{5}{9}
+        \gnode{6}{10}
+        \gnode{7}{12.5}
+        \connect{gamma2}{1.5}{1}{1}
+        \connect{gamma1}{3}{4}{2}
+        \connect{beta}{6.5}{7}{1}
+        \connect{beta}{9.5}{10}{2}
+        \connect{alpha}{12.5}{13}{1}
+        \settier{4}
+        \gnode{1}{1}
+        \gnode{2}{3.5}
+        \gnode{3}{4.5}
+        \gnode{4}{7}
+        \gnode{5}{9.5}
+        \gnode{6}{10.5}
+        \gnode{7}{13}
+        \connect{alpha}{1}{1}{1}
+        \connect{gamma1}{3.5}{3}{1}
+        \connect{gamma2}{4.5}{5}{1}
+        \connect{beta}{7}{7}{1}
+        \connect{gamma2}{9.5}{9}{1}
+        \connect{gamma1}{10.5}{11}{1}
+        \connect{alpha}{13}{13}{1}
+        \settier{5}
+        \gnode{1}{1}
+        \gnode{2}{3}
+        \gnode{3}{5}
+        \gnode{4}{7}
+        \gnode{5}{9}
+        \gnode{6}{11}
+        \gnode{7}{13}
+        \connect{alpha}{1}{1}{1}
+        \connect{beta}{3}{3}{1}
+        \connect{beta}{5}{5}{1}
+        \connect{alpha}{7}{7}{1}
+        \connect{alpha}{9}{9}{1}
+        \connect{beta}{11}{11}{1}
+        \connect{alpha}{13}{13}{1}
+        \settier{6}
+        \gnode{1}{1}
+        \gnode{2}{3}
+        \gnode{3}{5}
+        \gnode{4}{7}
+        \gnode{5}{9}
+        \gnode{6}{11}
+        \gnode{7}{13}
+    \end{tikzpicture}
+\end{document}

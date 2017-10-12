@@ -7,8 +7,8 @@
 
 \begin{document}
     \title{
-    Weighted-Hypergraph Transversals:
-    A Practical Approach to Non-Contextuality Inequalities
+    Edge-Weighted Hypergraph Transversals: \\
+    An Algorithm for Non-Contextuality Inequalities
     }
     \author{Thomas C. Fraser}
     \email{tcfraser@tcfraser.com}
@@ -30,17 +30,17 @@
     \[ \events{V} \defined \bc{\w : V \to \outcomes{V} \mid \forall v \in V, \w\br{v} \in \outcomes{v}} \]
     Furthermore, the \term{domain $\domain{\w}$} of an event $\w$ is the set of random variables it valuates, i.e. if $\w \in \events{V}$ then $\domain{\w} = V$.
 
-    For every $V' \subset V$ and $\w \in \events{V}$, the \term{restriction of $\w$ onto $V'$} (denoted $\restrict{\w}{V'}$) corresponds to the unique event in $\events{V'}$ that agrees with $\w$ for all valuations of variables in $V'$, i.e. $\forall v' \in V': \restrict{\w}{V'}\br{v'} = \w\br{v'}$. Using this notational framework, a probability distribution or simply \term{distribution} $\prob{V}$ is a probability measure on $\events{V}$, assigning to each $\w \in \events{V}$ a real number $\prob{V}\br{\w} \in \bs{0,1}$ such that $\sum_{\w \in \events{V}} \prob{V}\br{\w} = 1$. The set of all distributions over $\events{V}$ is denoted $\probset{V}$. Moreover, given $\prob{V} \in \probset{V}$ and $V' \subset V$, there is an induced distribution $\restrict{\prob{V}}{V'} \in \probset{V'}$ obtained by \textit{marginalizing} $\prob{V}$:
+    For every $\w \in \events{V}$ and $V' \subset V$, the \term{restriction of $\w$ onto $V'$} (denoted $\restrict{\w}{V'}$) corresponds to the unique event in $\events{V'}$ that agrees with $\w$ for all valuations of variables in $V'$, i.e. $\forall v' \in V': \restrict{\w}{V'}\br{v'} = \w\br{v'}$. Using this notational framework, a probability distribution or simply \term{distribution} $\prob{V}$ is a probability measure on $\events{V}$, assigning to each $\w \in \events{V}$ a real number $\prob{V}\br{\w} \in \bs{0,1}$ such that $\sum_{\w \in \events{V}} \prob{V}\br{\w} = 1$. The set of all distributions over $\events{V}$ is denoted $\probset{V}$. Moreover, given $\prob{V} \in \probset{V}$ and $V' \subset V$, there is an induced distribution $\restrict{\prob{V}}{V'} \in \probset{V'}$ obtained by \textit{marginalizing} $\prob{V}$:
     \[ \restrict{\prob{V}}{V'}\br{\w'} = \sum_{\substack{\w \in \events{V} \\ \restrict{\w}{V'} = \w'}} \prob{V}\br{\w} \eq \label{eq:marginalization_defined} \]
     Presently, the reader is equipped with sufficient notation and terminology to comprehend the marginal problem.
     \begin{definition}
-        \term{The Marginal Problem}: Given a collection of $m$ distributions $\bc{\prob{V_1},\ldots,\prob{V_m}}$, does there exist a distribution $\prob{\jointvar} \in \probset{\jointvar}$ with $\jointvar \defined \bigcup_{i = 1}^{m} V_m$ such that $\forall i : \restrict{\prob{\jointvar}}{V_i} = \prob{V_i}$?
+        \term{The Marginal Problem (MP)}: Given a collection of $m$ distributions $\bc{\prob{V_1},\ldots,\prob{V_m}}$, does there exist a distribution $\prob{\jointvar} \in \probset{\jointvar}$ with $\jointvar \defined \bigcup_{i = 1}^{m} V_m$ such that $\forall i : \restrict{\prob{\jointvar}}{V_i} = \prob{V_i}$?
     \end{definition}
 
-    To facilitate further discussion of this problem, several pieces of nomenclature will be introduced. First, the set $\mscenario = \bc{V_1, \ldots, V_m}$ is called the \term{marginal scenario} while its elements are called the \term{marginal contexts}. The collection of distributions $\prob{\mscenariowrap} \defined \bc{\prob{V_1},\ldots,\prob{V_m}}$\footnote{The subscript $*$ preceding $\mscenariowrap$ is added for clarity; $\prob{\mscenariowrap}$ is \textit{not} a distribution but a set of distributions over $\mscenario$. The $\mscenariowrap$ convention is adopted throughout this report.} is called the \term{marginal model}~\cite{Fritz_2011}\footnote{In~\cite{Abramsky_2011}, $\prob{\mscenariowrap}$ is instead called an \textit{empirical model}.}. The distribution $\prob{\jointvar}$, if it exists, is termed the \term{joint distribution}. Strictly speaking, as defined by~\cite{Fritz_2011}, a marginal scenario forms an \textit{abstract simplicial complex}, meaning it satisfies the supplementary requirement that all subsets of contexts are also contexts, i.e. $\forall V \in \mscenario : V' \subset V \implies V' \in \mscenario$. Throughout this work, we exclusively consider (without loss of generality) \textit{maximal} marginal scenarios, restricting our focus to the contexts which are contained in no others. Finally, a marginal model $\prob{\mscenariowrap}$ is said to be \term{non-contextual}, and will be denoted $\prob{\mscenariowrap} \in \noncontextual \subseteq \probset{\mscenariowrap}$ if it admits a joint distribution and \term{contextual} otherwise ($\prob{\mscenariowrap} \in \contextual$). Equipped with this additional terminology and notation, the marginal problem now reads: given $\prob{\mscenariowrap}$, is $\prob{\mscenariowrap} \in \noncontextual$ or not?
+    To facilitate further discussion of this problem, several pieces of nomenclature will be introduced. First, the set $\mscenario = \bc{V_1, \ldots, V_m}$ is called the \term{marginal scenario} while its elements are called the \term{marginal contexts}. The collection of distributions $\prob{\mscenariowrap} \defined \bc{\prob{V_1},\ldots,\prob{V_m}}$\footnote{The subscript $*$ preceding $\mscenariowrap$ is added for clarity; $\prob{\mscenariowrap}$ is \textit{not} a distribution but a set of distributions over $\mscenario$. The $\mscenariowrap$ convention is adopted throughout this report.} is called the \term{marginal model}~\cite{Fritz_2011}\footnote{In~\cite{Abramsky_2011}, $\prob{\mscenariowrap}$ is instead called an \textit{empirical model}.}. The distribution $\prob{\jointvar}$, if it exists, is termed the \term{joint distribution}. Strictly speaking, as defined by~\cite{Fritz_2011}, a marginal scenario forms an \textit{abstract simplicial complex}, meaning it satisfies the supplementary requirement that all subsets of contexts are also contexts, i.e. $\forall V \in \mscenario : V' \subset V \implies V' \in \mscenario$. Throughout this work, we exclusively consider (without loss of generality) \textit{maximal} marginal scenarios, restricting our focus to the contexts which are contained in no others. Finally, a marginal model $\prob{\mscenariowrap}$ is said to be \term{non-contextual}, and will be denoted $\prob{\mscenariowrap} \in \noncontextual \subseteq \probset{\mscenariowrap}$ if it admits a joint distribution and \term{contextual} otherwise ($\prob{\mscenariowrap} \in \contextual$). Equipped with this additional terminology and notation, MP now reads: given $\prob{\mscenariowrap}$, is $\prob{\mscenariowrap} \in \noncontextual$ or not?
 
     \subsection{Linearity}
-    An essential feature of the marginal problem is linearity; the marginalization of $\prob{\jointvar}$ onto the marginal contexts $\bc{\restrict{\prob{\jointvar}}{V} \mid V \in \mscenario}$ is a linear transformation, requiring only the summations pursuant to \cref{eq:marginalization_defined}. Consequently, it is advantageous to consider the statement of the marginal problem as a matrix multiplication. To this end, for each marginal scenario $\mscenario$ we define a binary matrix $\incidence$ called the \term{incidence matrix} which implements this mapping. The columns of $\incidence$ are indexed by \textit{joint events} $j \in \events{\jointvar}$ and the rows are indexed by \textit{marginal events} $m \in \events{V}$ for some $V \in \mscenario$. By deliberate abuse of notation, we will denote the set of all marginal events as $\events{\mscenariowrap}$ and is defined as the following disjoint union:
+    An essential feature of MP is linearity; the marginalization of $\prob{\jointvar}$ onto the marginal contexts $\bc{\restrict{\prob{\jointvar}}{V} \mid V \in \mscenario}$ is a linear transformation, requiring only the summations pursuant to \cref{eq:marginalization_defined}. Consequently, it is advantageous to consider the statement of MP as a matrix multiplication. To this end, for each marginal scenario $\mscenario$ we define a binary matrix $\incidence$ called the \term{incidence matrix} which implements this mapping. The columns of $\incidence$ are indexed by \textit{joint events} $j \in \events{\jointvar}$ and the rows are indexed by \textit{marginal events} $m \in \events{V}$ for some $V \in \mscenario$. By deliberate abuse of notation, we will denote the set of all marginal events as $\events{\mscenariowrap}$ and is defined as the following disjoint union:
     \[ \events{\mscenariowrap} \defined \coprod_{V \in \mscenario} \events{V} \]
     The $\abs{\events{\mscenariowrap}}\times\abs{\events{\jointvar}}$ incidence matrix $\incidence$ is then defined element-wise for $m \in \events{\mscenariowrap}$ and $j \in \events{\jointvar}$:
     \[ \incidence^{m}_{j} = \begin{cases}
@@ -186,52 +186,115 @@
     \subsection{Targeted Searches}
     \subsection{Relaxations}
 
-    \section{Edge-Weighted Hypergraph Transversals}
+    \section{Hypergraph Transversals}
     \subsection{Preliminaries}
-    \begin{center}
-        \begin{figure}
-            \includegraphics[width=\linewidth]{figures/hypergraph_diagram_1_standalone/figure.pdf}
-            \includegraphics[width=0.8\linewidth]{figures/hypergraph_matrix_1_standalone/figure.pdf}
-            \caption{Dual-representations of a hypergraph $\hypergraph = \bc{\edges_1,\edges_2,\edges_3,\edges_4,\edges_5}$.}
-        \end{figure}
-    \end{center}
-    \subsection{Hypergraph Transversals}
-    The space of all positive integer multi-sets over the universe of elements $U$ is denoted $\Z_{\geq 0}^{U}$.
+    \cite{Kavvadias_2005}
+    \cite{Boros_2004}
+    \cite{Boros_2002}
+    \todo[TC]{Numerous computational problems can be casted as a hypergraph transversal problem}
+    \todo[TC]{w,t-transversals are not the same thing}
     \begin{definition}
-        A multi-set $t \in \Z_{\geq 0}^{\s N}$ is a \term{$\w$-super-transversal of $\hypergraph$} if $t \cdot \hypergraph \succeq \w$. A $\w$-transversal $t$ of $\hypergraph$ is \term{minimal} if there does not exist another $\w$-transversal $t'$ of $\hypergraph$ such that $t' \preceq t$. The set of all minimal $\w$-transversals of $\hypergraph$ will be denoted $\transversals{\succeq\w}{\hypergraph}$.
-        \[ \transversals{\succeq\w}{\hypergraph} \defined \min\bc{t \in \Z_{\geq 0}^{\s N} \mid t \cdot \hypergraph \succeq \w} \]
+        \label{def:hypergraph}
+        A \term{hypergraph} $\hypergraph$ is an ordered pair $\hypergraph = \br{\nodes, \edges}$ where $\nodes = \bc{n_1, \ldots, n_p}$ is some finite set and $\edges$ is a finite collection of non-empty subsets $\edges = \bc{\edges_{1}, \ldots, \edges_{q}}$ of $\nodes$. The elements of $\nodes$ are called \term{nodes} while the elements of $\edges$ are called \term{hyperedges} of the hypergraph $\hypergraph$.
     \end{definition}
-    Dual to $\w$-super-transversals are \term{$\w$-sub-transversals};
+
+    A hypergraph generalizes the notion of a \textit{graph} in that each hyperedge has the capacity to contain more (or possibly less) than two nodes. This generalization is illustrated by \cref{fig:hypergraph_diagram_example}, in which the hyperedges enclose their corresponding nodes. For large hypergraphs, this graphical representation can be cumbersome to draw. Alternatively, a hypergraph can be represented by a $p\times q$ binary matrix wherein non-zero entries indicate node-hyperedge membership. The matrix representation of \cref{fig:hypergraph_diagram_example} is depicted in \cref{fig:hypergraph_matrix_example}. Representing $\hypergraph$ as a matrix, the two conditions of \cref{def:hypergraph} ensure that no row or column of $\hypergraph$ is completely filled with zeros. Henceforth, $\hypergraph$ will be used to denote both a hypergraph and its corresponding matrix representation.
+    \begin{figure}
+    \begin{subfigure}{\linewidth}
+        \includegraphics[width=\linewidth]{figures/hypergraph_diagram_1_standalone/figure.pdf}
+        \caption{Graphical representation of $\hypergraph$.}
+        \label{fig:hypergraph_diagram_example}
+    \end{subfigure}
+    \begin{subfigure}{0.8\linewidth}
+        \includegraphics[width=0.8\linewidth]{figures/hypergraph_matrix_1_standalone/figure.pdf}
+        \caption{Matrix representation of $\hypergraph$.}
+        \label{fig:hypergraph_matrix_example}
+    \end{subfigure}
+    \caption{Two different representations of a hypergraph $\hypergraph$ which has $5$ hyperedges and $7$ nodes.}
+    \end{figure}
+
+    \begin{definition}
+        Given a $\term{weighting}$ $\w \in \Z_{\geq 1}^{\edges}$, a vector $t \in \Z_{\geq 0}^{\nodes}$\footnote{Here, $\Z_{\geq c}^{m}$ denotes the set of all $m$-length integer vectors $x$ such that $x_{i} \geq c, \forall i$.} is an \term{$\w$-transversal} of the hypergraph $\hypergraph$ if it is a solution to $t \cdot \hypergraph \succeq \w$.
+    \end{definition}
+
+    \begin{definition}
+        An $\w$-transversal $t$ of the hypergraph $\hypergraph$ is \term{minimal} if there does not exist another $\w$-transversal $t'$ of $\hypergraph$ different from $t$ such that $t' \preceq t$.
+    \end{definition}
+
+    In the special case where $\w = \mathbf{1}_{\edges}$, one recovers the notion of a \textit{transversal} of a hypergraph; $t \cdot \hypergraph \succeq \mathbf{1}_{\edges}$ if and only if the support $\si\br{t} \subseteq \nodes$ of $t$ intersects every hyperedge of $\hypergraph$, i.e. $\si\br{t} \cap \edges_{i} \neq 0, \forall \edges_i \in \edges$.
+
+    \begin{definition}
+        The set of all minimal, $\w$-transversals of $\hypergraph$ will be denoted $\transversals{\succeq\w}{\hypergraph}$.
+    \end{definition}
+
+    The purpose of \cref{sec:algorithm_section} is to provide an algorithm which, when given a weighting $\w$ and hypergraph $\hypergraph$, computes $\transversals{\succeq\w}{\hypergraph}$. In the special case of $\w = \mathbf{1}_{\edges}$, it is customary to identify a class of hypergraphs known as \textit{simple} or \textit{Sperner} hypergraphs wherein $\forall i, j : \edges_i \subseteq \edges_j \Rightarrow j = i$ \cite{Berge_1984}. Non-simple hypergraphs possess a redundancy: whenever $\edges_i \subset \edges_j$, any $t \subseteq \nodes$ which satisfies $t \cap \edges_i \neq 0$ automatically satisfies $t \cap \edges_j \neq 0$ and hence any such $\edges_j$ can be ignored by any transversal generation algorithm. Analogous redundancies are absent from the $\w$-transversal generation problem because $\w \in \Z_{\geq 1}^{\edges}$ is arbitrary.
+
+    \subsection{Generalized Nodes}
+
+    In the original algorithm of \citet{Kavvadias_2005}, the concept of a \textit{generalized node} was introduced in order to improve the total running time and reduce memory requirements. The algorithm presented in \cref{sec:algorithm_section} also utilizes these generalized nodes and benefits significantly by reducing the number of intermediate partial transversals.
+
+    Let $\s X_{k}$ be the generalized nodes of $\s H_{k}$. The generalized nodes $\s X_{k+1}$ of $\s H_{k+1} = \s H_{k} \cup \bc{\edges_{k+1}}$ can be computed using only $\s X_{k}$ and $\edges_{k+1}$. The following procedure accomplishes this as well as classifies each
+    \begin{itemize}
+        \item[($\al$)] If $X \cap \edges_{k+1} = \emptyset$, then $X \in \s X^{\al}_{k+1}$.
+        \item[($\be$)] If $X \subseteq \edges_{k+1}$, then $X \in \s X^{\be}_{k+1}$.
+        \item[($\ga$)] If $X \cap \edges_{k+1} \neq \emptyset$ and $X \not \subseteq \edges_{k+1}$, then
+        \begin{itemize}
+            \item[($\ga_1$)] $X \setminus \br{X \cap \edges_{k+1}} \in \s X^{\ga_1}_{k+1}$,
+            \item[($\ga_2$)] $X \cap \edges_{k+1} \in \s X^{\ga_2}_{k+1}$.
+        \end{itemize}
+    \end{itemize}
+    As a special case, if $\edges_{k+1}$ introduces any new nodes not captured by $\s X_{k}$, these nodes form a unique type $\de$ in $\s X_{k+1}$.
+    \begin{itemize}
+        \item[($\de$)] If $\de X \defined \edges_{k+1} \cap \br{\bigcup_{X \in \s X_{k}} X}$, then $\de X \in \s X_{k+1}^{\de}$.
+    \end{itemize}
+
+    \begin{figure}
+        \includegraphics[width=\linewidth]{figures/hypergraph_matrix_2_standalone/figure.pdf}
+        \includegraphics[width=\linewidth]{figures/generalized_node_tree_2/figure.pdf}
+        \caption{The Generalized Node Tree of a hypergraph $\hypergraph$ which has $6$ hyperedges and $7$ nodes.}
+    \end{figure}
 
 
-    \[ \transversals{\preceq\w}{\hypergraph} \defined \bc{t \mid t \cdot \hypergraph \preceq \w, \not \exists t' \succeq t : t' \cdot \hypergraph \preceq \w } \]
-    \begin{align*}
-    t \cdot \hypergraph \preceq \w
-    &\iff - t \cdot \hypergraph \succeq -\w  \\
-    &\iff k \mathbf{1}_{\nodes} \cdot \hypergraph- t \cdot \hypergraph \succeq k \mathbf{1}_{\nodes} \cdot \hypergraph-\w  \qquad k \defined \max\br{\w}\\
-    &\implies k \mathbf{1}_{\nodes} \cdot \hypergraph - t \cdot \hypergraph \succeq k \mathbf{1}_{\nodes} \cdot \hypergraph-\w \qquad \mathbf{1}_{\nodes} \cdot \hypergraph \succeq \mathbf{1}_{\nodes} \cdot \hypergraph \\
-    &\implies \br{k \mathbf{1}_{\nodes} - t} \cdot \hypergraph \succeq k \mathbf{1}_{\nodes} \cdot \hypergraph-\w
-    \end{align*}
-    \begin{align*}
-    \ti t \in \transversals{\succeq\br{k \mathbf{1}_{\nodes} \cdot \hypergraph-\w}}{\hypergraph}
-    &\implies \ti t \cdot \hypergraph \succeq k \mathbf{1}_{\nodes} \cdot \hypergraph-\w \\
-    &\implies k \mathbf{1}_{\nodes} \cdot \hypergraph - \ti t \cdot \hypergraph \preceq \w \\
-    &\implies k \mathbf{1}_{\nodes} \cdot \hypergraph - \br{k \mathbf{1}_{\nodes} - t} \cdot \hypergraph \preceq \w \\
-    &\implies k \br{\mathbf{1}_{\nodes} \cdot \hypergraph - \mathbf{1}_{\nodes} \cdot \hypergraph} + t \cdot \hypergraph \preceq \w \\
-    &\implies t \cdot \hypergraph \preceq \w
-    \end{align*}
-    If $\ti t$ is minimal, is $t = k \mathbf{1}_{\nodes} - \ti t$? Suppose $t' \succeq t$ was also a transversal,
-    \[ t' \cdot \hypergraph \preceq \w \]
-    \[ \br{k \mathbf{1}_{\nodes} - \ti t'} \cdot \hypergraph \preceq \w \]
-    \[  k \mathbf{1}_{\nodes} \cdot \hypergraph - \ti t' \cdot \hypergraph \preceq \w \]
-    \subsection{Adding Weights}
+    \subsection{An Algorithm}
+    \label{sec:algorithm_section}
+
+    \begin{definition}
+        Given a set of generalized nodes $\s X$ for $\s N$, define the \term{unpacking operation} $\mathrm{U}_{\!\s X}$ which takes any vector $t \in \Z_{\geq 0}^{\s X}$ to a family of vectors $\mathrm{U}_{\!\s X}\br{t} \subset \Z_{\geq 0}^{\s N}$:
+        \[ \mathrm{U}_{\!\s X}\br{t} \defined \bcm{t' \in \Z_{\geq 0}^{\s N}}{\forall X \in \s X, {\sum}_{n \in X} t'_{n} = t_{X}} \]
+    \end{definition}
+    \[ \abs{\mathrm{U}_{\!\s X}\br{t}} = \prod_{X \in \s X} \binom{t_{X} + \abs{X} - 1}{t_{X}} \]
+    % \[ \mathbf{E}\br{\s H} = \bc{\s E_1, \ldots, \s E_q} \]
+    % \[ \mathbf{N}\br{\s H} = \bc{n_1, \ldots, n_p} \]
+    % \[ \mathbf{W}\br{\s H} = \bc{\w_1, \ldots, \w_q} \]
+    % \[ \mathbf{W}\br{\s H_k} = \bc{\w_1, \ldots, \w_k} \]
+    % \[ \mathbf{E}\br{\s H_k} = \bc{\s E_1, \ldots, \s E_k} \]
+    % \[ \mathbf{N}\br{\s H_k} = \bc{n_1, \ldots, n_k} \]
+
+    \[ \widetilde {\s T}_{\succeq \w_{k]}}\br{\s H_{k]}} = \mathrm{U}_{\!\s X_{k}}\br{\widetilde {\s T}_{\succeq \w_{k]}}^{\s X_{k}}\br{\s H_{k]}}} \]
+    \[ \s X_{k} = \s X_{k}^{\al} \sqcup \s X_{k}^{\be} \sqcup \s X_{k}^{\ga_1} \sqcup \s X_{k}^{\ga_2} \sqcup \s X_{k}^{\de} \]
+
+    \begin{definition}
+        Given $t \in \widetilde {\s T}_{\succeq \w_{k]}}^{\s X_{k}}\br{\s H_{k]}}$, the \term{offspring} $\s O\br{t}$ of $t$ are all minimal $\w_{k]}$-transversals of $\s H_{k]}$ in terms of the generalized nodes $\s X_{k+1}$. $\s O\br{t}$ is the set of all $t' \in \Z_{\geq 0}^{\s X_{k+1}}$
+        \begin{itemize}
+            \item $\forall X \in \s X_{k+1}^{\al} \cup \s X_{k+1}^{\be}, t'_{X} = t_{X}$ and
+            \item $\forall X_1 \in \s X_{k+1}^{\ga_1}, X_2 \in \s X_{k+1}^{\ga_2}$ such that $X_1 \cup X_2 \in \s X_{k}$
+        \end{itemize}
+    \end{definition}
+    \[ \s E_{k+1} = \s X_{k+1}^{\be} \sqcup \s X_{k+1}^{\ga_2} \sqcup \s X_{k+1}^{\de} \]
+    Given transversal $t$, each offspring $t' \in \s O\br{t}$ already covers edge $\s E_{k+1}$ an amount $\eta$.
+    \[ \eta \defined t' \cdot \s E_{k+1} = \sum_{X \in \s X_{k+1}^{\be} \sqcup \s X_{k+1}^{\ga_2}} t_X \]
+    If $\eta < \w_{k+1}$ then the offspring $t'$ needs to be supplemented by $s \in \Z_{\geq 0}^{\s X_{k+1}}$ such that $s$ covers the remaining weight for edge $\s E_{k+1}$. Explicitly, $s$ needs to be constructed such that,
+    \[ s \cdot \s E_{k+1} = \sum_{X \in \s X_{k+1}^{\be, \ga_2, \de}} s_{X} = \w_{k+1} - \eta  \]
+    \[ \s S\br{t'} \defined  t_X \]
+
+
+    \section{Conclusions}
 
     \subsection{Unsolved}
     Consider $\ga_{1}, \ga_{2}$ and $\ga_{1} + \ga_{2}$.
     \[ I\br{\ga_a} = \bc{\br{\ga_{a} + \ti \ga_{a}} \cdot \prob{\mscenariowrap} \geq 0 \mid \ti \ga_{a} \in \transversals{\w\br{\ga_a}}{\hypergraph\br{\ga_a}}} \quad a = 1,2 \]
-    \[ I\br{\ga_1 + \ga_2} = \bc{\br{\ga_{1} + \ga_{2} + \ti \ga_{12}} \cdot \prob{\mscenariowrap} \geq 0 \mid \ti \ga_{12} \in \transversals{\w\br{\ga_1}+\w\br{\ga_2}}{\hypergraph\br{\ga_1 + \ga_2}}} \]
+    % \[ I\br{\ga_1 + \ga_2} = \bc{\br{\ga_{1} + \ga_{2} + \ti \ga_{12}} \cdot \prob{\mscenariowrap} \geq 0 \mid \ti \ga_{12} \in \transversals{\w\br{\ga_1}+\w\br{\ga_2}}{\hypergraph\br{\ga_1 + \ga_2}}} \]
 
-    \section{Conclusions}
     \section*{Acknowledgments}
 
     \setlength{\bibsep}{3pt plus 3pt minus 2pt}

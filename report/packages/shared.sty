@@ -58,6 +58,7 @@ anchorcolor=OliveGreen}
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}
 \newtheorem{example}{Example}
+\crefname{definition}{Def.}{Defs.}
 
 \theoremstyle{remark}
 \newtheorem{remark}{Remark}
@@ -84,6 +85,7 @@ anchorcolor=OliveGreen}
 \usepgflibrary{fpu} % To deal with dimension too large errors
 \usepackage{chngpage} % For indentation
 \usepackage{graphicx} % For images
+\usepackage{subcaption} % For subfigures
 \usepackage[super]{nth} % For 1st, 2nd, 3rd etc.
 \usepackage{epstopdf} % For .eps figures
 \usepackage{centernot} % For doesn't implies
@@ -95,12 +97,6 @@ anchorcolor=OliveGreen}
 % \usepackage{eufrak} % For gothic font letters in mathmode Note: Redundant if amsfonts is used
 \usepackage{lmodern} % Font with all characters
 \usepackage{csquotes} % For quotes
-%\setlength{\belowcaptionskip}{-10pt}
-%\usepackage[justification=justified,labelfont=small]{subcaption}
-%\usepackage{ragged2e}
-%\DeclareCaptionJustification{justified}{\justifying}
-%\captionsetup{justification=justified,singlelinecheck=false,labelfont=small}
-%\PassOptionsToPackage{justification=justified}{caption}
 \usepackage{enumitem}
 
 % === Custom Packages ===
@@ -110,4 +106,3 @@ anchorcolor=OliveGreen}
 
 % === Drafting Declarations ===
 \draftprofile[TC Fraser]{TC}{Red}
-\draftprofile[Elie Wolfe]{E}{Green}
