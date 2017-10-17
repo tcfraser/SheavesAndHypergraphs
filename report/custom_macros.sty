@@ -1,0 +1,84 @@
+% =========================================================
+% =========================================================
+
+% Introduce a new term or definition.
+\newcommand{\term}[1]{\textcolor{medblue}{\boldmath{\textbf{#1}}}}
+
+% === Commonly re-occurring symbols ===
+\newcommand{\hgraph}{\mathcal{H}}
+\newcommand{\graph}{\mathcal{G}}
+\newcommand{\nodes}{\mathcal{N}}
+\newcommand{\edges}{\mathcal{E}}
+\newcommand{\trans}{\mathcal{T}}
+\newcommand{\ind}{S}
+% \newcommand{\inhibit}{\mathcal{I}}
+\newcommand{\netperm}{\Pi}
+\newcommand{\Hilb}{\mathcal{H}}
+\newcommand{\indep}{\perp\!\!\!\perp}
+\newcommand{\ancestralindep}{\perp}
+\newcommand{\valprod}{\times}
+\newcommand{\bigvalprod}{\prod}
+\newcommand{\com}{\mathrel{\Yright\hspace{-0.2em}\Yleft}}
+\newcommand{\ext}{\mathrel{\Yleft}}
+\newcommand{\res}{\mathrel{\Yright}}
+\newcommand{\gep}{\varphi}
+\newcommand{\gp}{\Phi}
+\newcommand{\geo}{\omega}
+\newcommand{\go}{\Omega}
+\newcommand{\mscenario}{\mathcal{V}}
+\newcommand{\mscenariowrap}{\!{}_*\!\mathcal{V}}
+\newcommand{\jointvar}{\La}
+\newcommand{\supp}[1]{\si\br{#1}}
+% https://tex.stackexchange.com/questions/232922/a-hack-for-getting-a-capital-weierstrass-p-in-order-to-represent-the-power-set
+\newcommand{\powerset}{\raisebox{.15\baselineskip}{\Large\ensuremath{\wp}}}
+
+% \newcommand{\mext}[1]{E_{#1}}
+% \newcommand{\mul}[1]{\Gamma_{#1}}
+\newcommand{\isext}[2]{\delta_{#1 \ext #2}}
+\newcommand{\ts}{{\graph}}
+\newcommand{\tcdot}{} % Tentative cdot, not sure if I want to keep dots
+\newcommand{\fritz}{\text{F}}
+\newcommand{\p}[1]{#1}
+
+% === Mathematical operators that are denoted with words ===
+\newcommand{\setoperator}[1]{%
+\expandafter\DeclareDocumentCommand\csname#1\endcsname{O{} O{} m}{{\mathsf{#1}_{##1}^{##2}}\br{##3}}%
+}
+
+\setoperator{Pa} % Parents of a node
+\setoperator{Ch} % Children of a node
+\setoperator{An} % Ancestry of a node
+\setoperator{Sub} % subgraph
+\setoperator{AnSub} % Ancestral subgraph
+\setoperator{De} % Ancestral subgraph
+\setoperator{Ext} % Extension of outcomes
+\setoperator{Com} % Compatible equivalence relation
+\setoperator{Nec} % Necessary nodes
+\setoperator{UnNec} % Unnecessary nodes
+\setoperator{Inj} % injectable sets
+\setoperator{ImInj} % images of the injectable sets
+\setoperator{PreInj} % Pre-injectable sets
+\setoperator{AnSepExpr} % as-expressible sets
+\setoperator{Expr} % expressible sets
+\setoperator{ImPreInj} % images of the Pre-injectable sets
+\setoperator{Aut} % graph automorphism
+\setoperator{Orb} % Group Orbits
+\setoperator{Perm} % Permutation group
+\newcommand{\transversals}[2]{\mathrm{Tr}_{#1}\br{#2}} % transversals
+\newcommand{\PermM}[1]{\La_{#1}} % Permutation matrix
+% \setoperator{Out} % Outcome space
+\newcommand{\events}[1]{\Omega\br{#1}} % Set of events
+\newcommand{\outcomes}[1]{\mathcal{O}_{#1}} % Set of outcomes
+\newcommand{\domain}[1]{\mathcal{D}\br{#1}} % Domian
+\newcommand{\restrict}[2]{{#1}|_{#2}} % Restriction
+\newcommand{\incidence}{\mathcal{M}} % Incidence matrix
+\newcommand{\probset}[1]{\mathcal{P}_{#1}} % probsets
+\newcommand{\multiset}{\gamma} % multisets of integers choices for algebraic probability terms
+\newcommand{\hypergraph}{\mathcal{H}} %
+\newcommand{\inhibit}[1]{\mathcal{I}\br{#1}} % inhibiting set
+\newcommand{\noncontextual}{\mathcal{N}}
+\newcommand{\contextual}{\bar{\mathcal{N}}}
+\newcommand{\weight}{\w}
+\newcommand{\outc}[1]{o\bs{#1}} % Fritz's BBTII notation for observed outcomes
+\newcommand{\prob}[1]{{\mathsf{p}}_{#1}}
+\newcommand{\probvec}[1]{{\mathsf{p}}_{#1}}

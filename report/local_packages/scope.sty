@@ -1,3 +1,5 @@
+\usepackage{color} % For Colors
+\usepackage{ifthen} % For checking optional parameters
 \usepackage{xspace} % For annoying horizontal space to the right of string terms.
 
 % Defining const terms with appropriate xspace.
@@ -30,3 +32,20 @@
 \def\getscope#1{%
     \csname\scopedelim#1\endcsname%
 }
+
+\def\draftscope{draftscope}
+
+\newcommand{\draftprofile}[3][]{%
+    \expandafter\newcommand\csname \draftscope color#2\endcsname{#3}%
+    \expandafter\newcommand\csname \draftscope name#2\endcsname{\ifthenelse{\equal{#1}{}}{#2}{#1}}%
+}%
+
+\draftprofile{}{Red}%
+
+\newcommand{\comment}[2][]{%
+    \textcolor{\expandafter\csname \draftscope color#1\endcsname}{Comment\ifthenelse{\equal{#1}{}}{}{ (\expandafter\csname \draftscope name#1\endcsname)}: #2}%
+}%
+\newcommand{\todo}[2][]{%
+    \textcolor{\expandafter\csname \draftscope color#1\endcsname}{Todo\ifthenelse{\equal{#1}{}}{}{ (\expandafter\csname \draftscope name#1\endcsname)}: #2}%
+}%
+

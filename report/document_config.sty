@@ -1,0 +1,123 @@
+% =======================================================================
+% === Local Packages ====================================================
+% =======================================================================
+\usepackage{local_packages/scope} % custom set, const, and scope parameters configuarion
+\usepackage{local_packages/qol_macros} %
+\usepackage{local_packages/kbordermatrix} % For identifying work unfinished
+
+% =======================================================================
+% === Colors ============================================================
+% =======================================================================
+\usepackage[dvipsnames]{xcolor} % For divps compatible colors
+\definecolor{purple}{RGB}{128,0,128}
+\definecolor{ultramarine}{RGB}{63, 0, 255}
+\definecolor{medblue}{RGB}{0, 0, 100}
+\definecolor{panblue}{RGB}{0,24,150}
+\definecolor{carmine}{RGB}{150, 0, 24}
+\definecolor{gray}{RGB}{150, 150, 150}
+
+% =======================================================================
+% === Hyperref ==========================================================
+% =======================================================================
+\usepackage[
+    pdftex,
+    pdfversion=1.7,
+    pdfencoding=auto,
+    pdfnewwindow=true,
+    pdfusetitle=true,
+    bookmarks=true,
+    bookmarksnumbered=true,
+    bookmarksopen=true,
+    pdfpagemode=UseThumbs,
+    bookmarksopenlevel=1,
+    pdfpagelabels=false,
+    breaklinks=true,
+]{hyperref}
+\hypersetup{
+    colorlinks,
+    linkcolor=carmine,
+    citecolor=medblue,
+    urlcolor=panblue,
+    anchorcolor=OliveGreen
+}
+
+% =======================================================================
+% === Clever named cross references =====================================
+% =======================================================================
+\usepackage[capitalise]{cleveref}
+
+\Crefname{eqs}{Eqs.}{Eqs.}
+\creflabelformat{eqs}{(#2#1#3)}
+\crefrangelabelformat{equation}{(#3#1#4-#5#2#6)}
+\Crefmultiformat{equation}{Eqs.~(#2#1#3}{,#2#1#3)}{,#2#1#3}{,#2#1#3)}
+\crefrangelabelformat{eqs}{(#3#1#4-#5#2#6)}
+\Crefmultiformat{eqs}{Eqs.~(#2#1#3}{,#2#1#3)}{,#2#1#3}{,#2#1#3)}
+
+% =======================================================================
+% === Numbering For amsthm theorem environments =========================
+% =======================================================================
+\usepackage{amsthm} % The AMS theorems package
+\theoremstyle{plain}
+\usepackage{thmtools}
+
+\newtheorem{thm}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{example}{Example}
+\crefname{definition}{Def.}{Defs.}
+
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+\newtheorem{problem}{Problem}
+
+%\crefname{thm}{theorem}{theorems}
+\Crefname{thm}{Theorem}{Theorems}
+%\crefname{lemma}{lemma}{lemmas}
+\Crefname{lemma}{Lemma}{Lemmas}
+\Crefname{corollary}{Corollary}{Corollaries}
+
+% =======================================================================
+% === Miscellaneous Non-Config Packages =================================
+% =======================================================================
+\usepackage{amsmath} % American mathematics society
+\usepackage{bbm} % Bold math
+\usepackage{esint} % For closed integrals
+\usepackage{listings} % For code snippets
+\usepackage{amssymb} % For set symbols
+\usepackage{stmaryrd} % For Y arrows
+\usepackage{ifthen} % For checking optional parameters
+\usepackage{color} % For Colors
+\usepackage{array} % For better tables
+\usepackage[makeroom]{cancel} % For canceling out terms
+\usepackage{fancyhdr} % Required for custom headers
+\usepackage{extramarks} % Required for headers and footers
+\usepackage{lastpage} % For total page count
+\usepackage{tikz} % For drawing things on graphs
+\usetikzlibrary{calc} % For relative points
+\usetikzlibrary{decorations.markings, arrows.meta, arrows, decorations.pathreplacing, shapes.geometric} % for arrows half way
+\usepackage{pgfplots} % For Graphing
+\usepgflibrary{fpu} % To deal with dimension too large errors
+\usepackage{chngpage} % For indentation
+\usepackage{graphicx} % For images
+\usepackage{subcaption} % For subfigures
+\usepackage[super]{nth} % For 1st, 2nd, 3rd etc.
+\usepackage{epstopdf} % For .eps figures
+\usepackage{centernot} % For doesn't implies
+\usepackage{pgfplotstable} % For linear regression on pgfplot graphs
+\pgfplotsset{compat=1.12} % Requesting a specific version
+\usepackage[utf8]{inputenc} % Font with all characters
+\usepackage[T1]{fontenc} % Font with all characters
+% \usepackage{dsfont} % For \mathds
+% \usepackage{eufrak} % For gothic font letters in mathmode Note: Redundant if amsfonts is used
+\usepackage{lmodern} % Font with all characters
+\usepackage{csquotes} % For quotes
+\usepackage{enumitem}
+\usepackage{mathrsfs}
+
+% =======================================================================
+% === Custom macros for the body of the paper ===========================
+% =======================================================================
+\usepackage{custom_macros}
