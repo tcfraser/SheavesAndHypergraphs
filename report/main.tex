@@ -167,9 +167,9 @@
     \subsection{The Antecedent Hypergraph}
     Given an antecedent multi-set $\ga$ where $\ga \preceq 0$, we identify the \term{inhibiting set} of joint events $\inhibit{\ga} \subseteq \events{\jointvar}$ preventing $\ga \cdot \incidence$ from being positive semi-definite:
     \[ \inhibit{\ga} \defined \bc{j \in \events{\jointvar} \mid \br{\ga\cdot\incidence}_{j} < 0} \]
-    The inhibiting set $\inhibit{\ga}$ of $\ga$ completely characterizes the \term{antecedent hypergraph} $\hypergraph\br{\ga}$ whose edges $\edges_{j}$ are indexed by the inhibiting events $j \in \inhibit{\ga}$. Each edge $\edges_{j} \subseteq \events{\mscenariowrap}$ corresponds to the set of the marginal events $m \in \events{\mscenariowrap}$ which are restrictions of $j$. Specifically,
+    The inhibiting set $\inhibit{\ga}$ of $\ga$ completely characterizes the \term{antecedent hypergraph} $\hypg\br{\ga}$ whose edges $\edges_{j}$ are indexed by the inhibiting events $j \in \inhibit{\ga}$. Each edge $\edges_{j} \subseteq \events{\mscenariowrap}$ corresponds to the set of the marginal events $m \in \events{\mscenariowrap}$ which are restrictions of $j$. Specifically,
     \begin{gather*}
-        \hypergraph\br{\ga} \defined \bc{\edges_j \mid j \in \inhibit{\ga}} \\
+        \hypg\br{\ga} \defined \bc{\edges_j \mid j \in \inhibit{\ga}} \\
         \edges_{j} \defined \bc{m \in \events{\mscenariowrap} \mid m = \restrict{j}{\domain{m}}, \ga_{m} = 0}
     \end{gather*}
 
@@ -177,7 +177,7 @@
     \[ \w\br{\ga} = \bc{\w_j = - \br{\ga\cdot\incidence}_{j} \mid j \in \inhibit{\ga}} \]
 
     \todo[TC]{Define set of right-minimal inequalities}
-    \[ I\br{\ga} = \bc{\br{\ga + \ti \ga} \cdot \prob{\mscenariowrap} \geq 0 \mid \ti \ga \in \transversals{\w\br{\ga}}{\hypergraph\br{\ga}}}\]
+    \[ I\br{\ga} = \bc{\br{\ga + \ti \ga} \cdot \prob{\mscenariowrap} \geq 0 \mid \ti \ga \in \transversals{\w\br{\ga}}{\hypg\br{\ga}}}\]
 
     \subsection{Irreducibility}
     \subsection{Marginal Symmetries}
@@ -191,43 +191,44 @@
     \cite{Kavvadias_2005}
     \cite{Boros_2004}
     \cite{Boros_2002}
+    \cite{Gainer_2017}
     \todo[TC]{Numerous computational problems can be casted as a hypergraph transversal problem}
     \todo[TC]{w,t-transversals are not the same thing}
     \begin{definition}
         \label{def:hypergraph}
-        A \term{hypergraph} $\hypergraph$ is an ordered pair $\hypergraph = \br{\nodes, \edges}$ where $\nodes = \bc{n_1, \ldots, n_p}$ is some finite set and $\edges$ is a finite collection of non-empty subsets $\edges = \bc{\edges_{1}, \ldots, \edges_{q}}$ of $\nodes$. The elements of $\nodes$ are called \term{nodes} while the elements of $\edges$ are called \term{hyperedges} of the hypergraph $\hypergraph$.
+        A \term{hypergraph} $\hypg$ is defined by a set of nodes $\mathbf{N}\br{\hypg}$ whos $\hypg = \br{\nodes, \edges}$ where $\nodes = \bc{n_1, \ldots, n_p}$ is some finite set and $\edges$ is a finite collection of non-empty subsets $\edges = \bc{\edges_{1}, \ldots, \edges_{q}}$ of $\nodes$. The elements of $\nodes$ are called \term{nodes} while the elements of $\edges$ are called \term{hyperedges} of the hypergraph $\hypg$.
     \end{definition}
 
-    A hypergraph generalizes the notion of a \textit{graph} in that each hyperedge has the capacity to contain more (or possibly less) than two nodes. This generalization is illustrated by \cref{fig:hypergraph_diagram_example}, in which the hyperedges enclose their corresponding nodes. For large hypergraphs, this graphical representation can be cumbersome to draw. Alternatively, a hypergraph can be represented by a $p\times q$ binary matrix wherein non-zero entries indicate node-hyperedge membership. The matrix representation of \cref{fig:hypergraph_diagram_example} is depicted in \cref{fig:hypergraph_matrix_example}. Representing $\hypergraph$ as a matrix, the two conditions of \cref{def:hypergraph} ensure that no row or column of $\hypergraph$ is completely filled with zeros. Henceforth, $\hypergraph$ will be used to denote both a hypergraph and its corresponding matrix representation.
+    A hypergraph generalizes the notion of a \textit{graph} in that each hyperedge has the capacity to contain more (or possibly less) than two nodes. This generalization is illustrated by \cref{fig:hypergraph_diagram_example}, in which the hyperedges enclose their corresponding nodes. For large hypergraphs, this graphical representation can be cumbersome to draw. Alternatively, a hypergraph can be represented by a $p\times q$ binary matrix wherein non-zero entries indicate node-hyperedge membership. The matrix representation of \cref{fig:hypergraph_diagram_example} is depicted in \cref{fig:hypergraph_matrix_example}. Representing $\hypg$ as a matrix, the two conditions of \cref{def:hypergraph} ensure that no row or column of $\hypg$ is completely filled with zeros. Henceforth, $\hypg$ will be used to denote both a hypergraph and its corresponding matrix representation.
     \begin{figure}
     \begin{subfigure}{\linewidth}
         \includegraphics[width=\linewidth]{figures/hypergraph_diagram_1_standalone/figure.pdf}
-        \caption{Graphical representation of $\hypergraph$.}
+        \caption{Graphical representation of $\hypg$.}
         \label{fig:hypergraph_diagram_example}
     \end{subfigure}
     \begin{subfigure}{0.8\linewidth}
         \includegraphics[width=0.8\linewidth]{figures/hypergraph_matrix_1_standalone/figure.pdf}
-        \caption{Matrix representation of $\hypergraph$.}
+        \caption{Matrix representation of $\hypg$.}
         \label{fig:hypergraph_matrix_example}
     \end{subfigure}
-    \caption{Two different representations of a hypergraph $\hypergraph$ which has $5$ hyperedges and $7$ nodes.}
+    \caption{Two different representations of a hypergraph $\hypg$ which has $5$ hyperedges and $7$ nodes.}
     \end{figure}
 
     \begin{definition}
-        Given a $\term{weighting}$ $\w \in \Z_{\geq 1}^{\edges}$, a vector $t \in \Z_{\geq 0}^{\nodes}$\footnote{Here, $\Z_{\geq c}^{m}$ denotes the set of all $m$-length integer vectors $x$ such that $x_{i} \geq c, \forall i$.} is an \term{$\w$-transversal} of the hypergraph $\hypergraph$ if it is a solution to $t \cdot \hypergraph \succeq \w$.
+        Given a $\term{weighting}$ $\w \in \Z_{\geq 1}^{\edges}$, a vector $t \in \Z_{\geq 0}^{\nodes}$\footnote{Here, $\Z_{\geq c}^{m}$ denotes the set of all $m$-length integer vectors $x$ such that $x_{i} \geq c, \forall i$.} is an \term{$\w$-transversal} of the hypergraph $\hypg$ if it is a solution to $t \cdot \hypg \succeq \w$.
     \end{definition}
 
     \begin{definition}
-        An $\w$-transversal $t$ of the hypergraph $\hypergraph$ is \term{minimal} if there does not exist another $\w$-transversal $t'$ of $\hypergraph$ different from $t$ such that $t' \preceq t$.
+        An $\w$-transversal $t$ of the hypergraph $\hypg$ is \term{minimal} if there does not exist another $\w$-transversal $t'$ of $\hypg$ different from $t$ such that $t' \preceq t$.
     \end{definition}
 
-    In the special case where $\w = \mathbf{1}_{\edges}$, one recovers the notion of a \textit{transversal} of a hypergraph; $t \cdot \hypergraph \succeq \mathbf{1}_{\edges}$ if and only if the support $\si\br{t} \subseteq \nodes$ of $t$ intersects every hyperedge of $\hypergraph$, i.e. $\si\br{t} \cap \edges_{i} \neq 0, \forall \edges_i \in \edges$.
+    In the special case where $\w = \mathbf{1}_{\edges}$, one recovers the notion of a \textit{transversal} of a hypergraph; $t \cdot \hypg \succeq \mathbf{1}_{\edges}$ if and only if the support $\si\br{t} \subseteq \nodes$ of $t$ intersects every hyperedge of $\hypg$, i.e. $\si\br{t} \cap \edges_{i} \neq 0, \forall \edges_i \in \edges$.
 
     \begin{definition}
-        The set of all minimal, $\w$-transversals of $\hypergraph$ will be denoted $\transversals{\succeq\w}{\hypergraph}$.
+        The set of all minimal, $\w$-transversals of $\hypg$ will be denoted $\transversals{\succeq\w}{\hypg}$.
     \end{definition}
 
-    The purpose of \cref{sec:algorithm_section} is to provide an algorithm which, when given a weighting $\w$ and hypergraph $\hypergraph$, computes $\transversals{\succeq\w}{\hypergraph}$. In the special case of $\w = \mathbf{1}_{\edges}$, it is customary to identify a class of hypergraphs known as \textit{simple} or \textit{Sperner} hypergraphs wherein $\forall i, j : \edges_i \subseteq \edges_j \Rightarrow j = i$ \cite{Berge_1984}. Non-simple hypergraphs possess a redundancy: whenever $\edges_i \subset \edges_j$, any $t \subseteq \nodes$ which satisfies $t \cap \edges_i \neq 0$ automatically satisfies $t \cap \edges_j \neq 0$ and hence any such $\edges_j$ can be ignored by any transversal generation algorithm. Analogous redundancies are absent from the $\w$-transversal generation problem because $\w \in \Z_{\geq 1}^{\edges}$ is arbitrary.
+    The purpose of \cref{sec:algorithm_section} is to provide an algorithm which, when given a weighting $\w$ and hypergraph $\hypg$, computes $\transversals{\succeq\w}{\hypg}$. In the special case of $\w = \mathbf{1}_{\edges}$, it is customary to identify a class of hypergraphs known as \textit{simple} or \textit{Sperner} hypergraphs wherein $\forall i, j : \edges_i \subseteq \edges_j \Rightarrow j = i$ \cite{Berge_1984}. Non-simple hypergraphs possess a redundancy: whenever $\edges_i \subset \edges_j$, any $t \subseteq \nodes$ which satisfies $t \cap \edges_i \neq 0$ automatically satisfies $t \cap \edges_j \neq 0$ and hence any such $\edges_j$ can be ignored by any transversal generation algorithm. Analogous redundancies are absent from the $\w$-transversal generation problem because $\w \in \Z_{\geq 1}^{\edges}$ is arbitrary.
 
     \subsection{Generalized Nodes}
 
@@ -251,12 +252,31 @@
     \begin{figure}
         \includegraphics[width=\linewidth]{figures/hypergraph_matrix_2_standalone/figure.pdf}
         \includegraphics[width=\linewidth]{figures/generalized_node_tree_2/figure.pdf}
-        \caption{The Generalized Node Tree of a hypergraph $\hypergraph$ which has $6$ hyperedges and $7$ nodes.}
+        \caption{The Generalized Node Tree of a hypergraph $\hypg$ which has $6$ hyperedges and $7$ nodes.}
     \end{figure}
 
 
     \subsection{An Algorithm}
     \label{sec:algorithm_section}
+    \begin{algorithm}[htp]
+        \SetKwFunction{WKS}{WKS}
+        \SetKwInOut{Input}{Input}
+        \SetKwInOut{Output}{Output}
+        \SetKwProg{Procedure}{Procedure}{:}{}
+        \label[algorithm]{alg:WKS}
+        \Procedure{\WKS{$\s G$, $U$, $\ep$}}{}: \\
+        \Input{An instruction set $\s G$, a unitary $U$, and accuracy $\ep > 0$}
+        \Output{$S \in \ba{\s G}$ such that $d\br{S_{\times}, U} < \ep$}
+        Choose $\eta \geq \s O \br{\f{d^2 - 1}{\log \abs{\s G}} \log \br{1 / \ep}}$ \\
+        $T \leftarrow \bigcup_{\ell = 0}^{\eta} \s G^{\ell}$ \\
+        \For{$S \in T$}{
+            $S_{\times} \leftarrow \prod_{g \in S} g$ \\
+            \If{$d\br{S_{\times}, U} < \ep$}{
+                return S
+            }
+        }
+        \caption{Generation of Minimal Solutions}
+    \end{algorithm}
 
     \begin{definition}
         Given a set of generalized nodes $\s X$ for $\s N$, define the \term{unpacking operation} $\mathrm{U}_{\!\s X}$ which takes any vector $t \in \Z_{\geq 0}^{\s X}$ to a family of vectors $\mathrm{U}_{\!\s X}\br{t} \subset \Z_{\geq 0}^{\s N}$:
@@ -272,6 +292,29 @@
 
     \[ \widetilde {\s T}_{\succeq \w_{k]}}\br{\s H_{k]}} = \mathrm{U}_{\!\s X_{k}}\br{\widetilde {\s T}_{\succeq \w_{k]}}^{\s X_{k}}\br{\s H_{k]}}} \]
     \[ \s X_{k} = \s X_{k}^{\al} \sqcup \s X_{k}^{\be} \sqcup \s X_{k}^{\ga_1} \sqcup \s X_{k}^{\ga_2} \sqcup \s X_{k}^{\de} \]
+    \[ \s X_{k} \defined \s X_{k}^{\al,\be,\ga_1,\ga_2,\de} \]
+    \begin{definition}
+        \[ \s T\br{\s H, \w} \defined \bc{t \in \Z_{\geq 0}^{\nodes} \mid t \cdot \s H \succeq \w} \]
+        \[ \widetilde {\s T}\br{\s H, \w} \defined \bc{t \in \s T\br{\s H, \w} \mid \nexists t' \in \s T\br{\s H, \w}, t' \neq t, t' \preceq t} \]
+        \[ \s T_{k}\br{\s H, \w} \defined \bc{t \in \Z_{\geq 0}^{\nodes} \mid t \cdot \edges_i \geq \w_i, 1 \leq i \leq k} \]
+        \[ \s T_{k}\br{\s H, \w} \defined \bc{t \in \Z_{\geq 0}^{\nodes} \mid t \cdot \s H \succeq_{k} \w} \]
+        \[ \s T_{k}^{\s X}\br{\s H_{k]}, \w_{k]}} \defined \bc{t \in \Z_{\geq 0}^{\s X} \mid t \cdot \s H \succeq_{k} \w} \]
+        \[ \s T\br{\s H^{g}_{k]}, \w_{k]}} \defined \bc{t \in \Z_{\geq 0}^{\nodes\br{\s H_{k]}^{g}}} \mid t \cdot \s H^{g}_{k]} \succeq \w_{k]}} \]
+        Shorthand,
+        \[ \s X_k \defined \nodes\br{\s H_{k]}^{g}} \]
+
+        Begin with $\s T\br{\s H^{g}_{1]}, \w_{1]}} = \bc{t}$ which corresponds to a single generalized transversal $t \in \Z_{\geq 0}^{\s X_1}$. Since $\s X_k$ only contains one generalized node $\s X_1 = \bc{\edges_1}$, the initial generalized transversal has $t_{\s X_1} = \w_1$ ,
+        \[  \]
+
+        \[ \s T_{k}^{\s X}\br{, \w} \defined \bc{t \in \Z_{\geq 0}^{\s X} \mid t \cdot \s H \succeq_{k} \w} \]
+        \[ \s T_{q}\br{\s H, \w} = \s T\br{\s H, \w} \]
+        \[ \s T_{1}\br{\s H, \w} = \bc{t \in \Z_{\geq 0}^{\nodes} \mid t \cdot \edges_1 \geq \w_1} \]
+        \[ \s T_{1}\br{\s H, \w} = \bc{t \in \Z_{\geq 0}^{\nodes} \mid t \cdot \edges_1 \geq \w_1} \]
+        \[ \s T\br{\s H, \w} \defined \bc{t \in \Z_{\geq 0}^{\nodes} \mid t \cdot \edges_i \leq \w_i, 1 \leq i \leq q} \]
+    \end{definition}
+
+    Given the minimal solutions $\widetilde {\s T}\br{\s H_{k]}, \w_{k]}}$, how does one find the minimal solutions $\widetilde {\s T}\br{\s H_{k+1]}, \w_{k+1]}}$? Given a particular partial solution $t \in \widetilde {\s T}\br{\s H_{k]}, \w_{k]}}$
+
 
     \begin{definition}
         Given $t \in \widetilde {\s T}_{\succeq \w_{k]}}^{\s X_{k}}\br{\s H_{k]}}$, the \term{offspring} $\s O\br{t}$ of $t$ are all minimal $\w_{k]}$-transversals of $\s H_{k]}$ in terms of the generalized nodes $\s X_{k+1}$. $\s O\br{t}$ is the set of all $t' \in \Z_{\geq 0}^{\s X_{k+1}}$
@@ -292,8 +335,8 @@
 
     \subsection{Unsolved}
     Consider $\ga_{1}, \ga_{2}$ and $\ga_{1} + \ga_{2}$.
-    \[ I\br{\ga_a} = \bc{\br{\ga_{a} + \ti \ga_{a}} \cdot \prob{\mscenariowrap} \geq 0 \mid \ti \ga_{a} \in \transversals{\w\br{\ga_a}}{\hypergraph\br{\ga_a}}} \quad a = 1,2 \]
-    % \[ I\br{\ga_1 + \ga_2} = \bc{\br{\ga_{1} + \ga_{2} + \ti \ga_{12}} \cdot \prob{\mscenariowrap} \geq 0 \mid \ti \ga_{12} \in \transversals{\w\br{\ga_1}+\w\br{\ga_2}}{\hypergraph\br{\ga_1 + \ga_2}}} \]
+    \[ I\br{\ga_a} = \bc{\br{\ga_{a} + \ti \ga_{a}} \cdot \prob{\mscenariowrap} \geq 0 \mid \ti \ga_{a} \in \transversals{\w\br{\ga_a}}{\hypg\br{\ga_a}}} \quad a = 1,2 \]
+    % \[ I\br{\ga_1 + \ga_2} = \bc{\br{\ga_{1} + \ga_{2} + \ti \ga_{12}} \cdot \prob{\mscenariowrap} \geq 0 \mid \ti \ga_{12} \in \transversals{\w\br{\ga_1}+\w\br{\ga_2}}{\hypg\br{\ga_1 + \ga_2}}} \]
 
     \section*{Acknowledgments}
 
