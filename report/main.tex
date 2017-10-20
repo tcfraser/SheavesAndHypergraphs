@@ -168,9 +168,9 @@
     \subsection{The Antecedent Hypergraph}
     Given an antecedent multi-set $\ga$ where $\ga \preceq 0$, we identify the \term{inhibiting set} of joint events $\inhibit{\ga} \subseteq \events{\jointvar}$ preventing $\ga \cdot \incidence$ from being positive semi-definite:
     \[ \inhibit{\ga} \defined \bc{j \in \events{\jointvar} \mid \br{\ga\cdot\incidence}_{j} < 0} \]
-    The inhibiting set $\inhibit{\ga}$ of $\ga$ completely characterizes the \term{antecedent hypergraph} $\hypg\br{\ga}$ whose edges $\edges_{j}$ are indexed by the inhibiting events $j \in \inhibit{\ga}$. Each edge $\edges_{j} \subseteq \events{\mscenariowrap}$ corresponds to the set of the marginal events $m \in \events{\mscenariowrap}$ which are restrictions of $j$. Specifically,
+    The inhibiting set $\inhibit{\ga}$ of $\ga$ completely characterizes the \term{antecedent hypergraph} $\s H\br{\ga}$ whose edges $\edges_{j}$ are indexed by the inhibiting events $j \in \inhibit{\ga}$. Each edge $\edges_{j} \subseteq \events{\mscenariowrap}$ corresponds to the set of the marginal events $m \in \events{\mscenariowrap}$ which are restrictions of $j$. Specifically,
     \begin{gather*}
-        \hypg\br{\ga} \defined \bc{\edges_j \mid j \in \inhibit{\ga}} \\
+        \s H\br{\ga} \defined \bc{\edges_j \mid j \in \inhibit{\ga}} \\
         \edges_{j} \defined \bc{m \in \events{\mscenariowrap} \mid m = \restrict{j}{\domain{m}}, \ga_{m} = 0}
     \end{gather*}
 
@@ -178,7 +178,7 @@
     \[ \w\br{\ga} = \bc{\w_j = - \br{\ga\cdot\incidence}_{j} \mid j \in \inhibit{\ga}} \]
 
     \todo[TC]{Define set of right-minimal inequalities}
-    \[ I\br{\ga} = \bc{\br{\ga + \ti \ga} \cdot \prob{\mscenariowrap} \geq 0 \mid \ti \ga \in \transversals{\w\br{\ga}}{\hypg\br{\ga}}}\]
+    \[ I\br{\ga} = \bc{\br{\ga + \ti \ga} \cdot \prob{\mscenariowrap} \geq 0 \mid \ti \ga \in \transversals{\w\br{\ga}}{\s H\br{\ga}}}\]
 
     \subsection{Irreducibility}
     \subsection{Marginal Symmetries}
@@ -197,22 +197,22 @@
     \todo[TC]{w,t-transversals are not the same thing}
     \begin{definition}
         \label{def:hypergraph}
-        A \term{hypergraph} $\hypg$ is defined by a set of nodes $\mathbf{N}\br{\hypg}$ whos $\hypg = \br{\nodes, \edges}$ where $\nodes = \bc{n_1, \ldots, n_p}$ is some finite set and $\edges$ is a finite collection of non-empty subsets $\edges = \bc{\edges_{1}, \ldots, \edges_{q}}$ of $\nodes$. The elements of $\nodes$ are called \term{nodes} while the elements of $\edges$ are called \term{hyperedges} of the hypergraph $\hypg$.
+        A \term{hypergraph} $\s H$ is defined by a set of nodes $\mathbf{N}\br{\s H}$ whos $\s H = \br{\nodes, \edges}$ where $\nodes = \bc{n_1, \ldots, n_p}$ is some finite set and $\edges$ is a finite collection of non-empty subsets $\edges = \bc{\edges_{1}, \ldots, \edges_{q}}$ of $\nodes$. The elements of $\nodes$ are called \term{nodes} while the elements of $\edges$ are called \term{hyperedges} of the hypergraph $\s H$.
     \end{definition}
 
-    A hypergraph generalizes the notion of a \textit{graph} in that each hyperedge has the capacity to contain more (or possibly less) than two nodes. This generalization is illustrated by \cref{fig:hypergraph_diagram_example}, in which the hyperedges enclose their corresponding nodes. For large hypergraphs, this graphical representation can be cumbersome to draw. Alternatively, a hypergraph can be represented by a $p\times q$ binary matrix wherein non-zero entries indicate node-hyperedge membership. The matrix representation of \cref{fig:hypergraph_diagram_example} is depicted in \cref{fig:hypergraph_matrix_example}. Representing $\hypg$ as a matrix, the two conditions of \cref{def:hypergraph} ensure that no row or column of $\hypg$ is completely filled with zeros. Henceforth, $\hypg$ will be used to denote both a hypergraph and its corresponding matrix representation.
+    A hypergraph generalizes the notion of a \textit{graph} in that each hyperedge has the capacity to contain more (or possibly less) than two nodes. This generalization is illustrated by \cref{fig:hypergraph_diagram_example}, in which the hyperedges enclose their corresponding nodes. For large hypergraphs, this graphical representation can be cumbersome to draw. Alternatively, a hypergraph can be represented by a $p\times q$ binary matrix wherein non-zero entries indicate node-hyperedge membership. The matrix representation of \cref{fig:hypergraph_diagram_example} is depicted in \cref{fig:hypergraph_matrix_example}. Representing $\s H$ as a matrix, the two conditions of \cref{def:hypergraph} ensure that no row or column of $\s H$ is completely filled with zeros. Henceforth, $\s H$ will be used to denote both a hypergraph and its corresponding matrix representation.
     \begin{figure}
     \begin{subfigure}{\linewidth}
         \includegraphics[width=\linewidth]{figures/hypergraph_diagram_1_standalone/figure.pdf}
-        \caption{Graphical representation of $\hypg$.}
+        \caption{Graphical representation of $\s H$.}
         \label{fig:hypergraph_diagram_example}
     \end{subfigure}
     \begin{subfigure}{0.8\linewidth}
         \includegraphics[width=0.8\linewidth]{figures/hypergraph_matrix_1_standalone/figure.pdf}
-        \caption{Matrix representation of $\hypg$.}
+        \caption{Matrix representation of $\s H$.}
         \label{fig:hypergraph_matrix_example}
     \end{subfigure}
-    \caption{Two different representations of a hypergraph $\hypg$ which has $5$ hyperedges and $7$ nodes.}
+    \caption{Two different representations of a hypergraph $\s H$ which has $5$ hyperedges and $7$ nodes.}
     \end{figure}
 
     \begin{definition}
@@ -266,7 +266,7 @@
     \begin{figure}
         \includegraphics[width=\linewidth]{figures/hypergraph_matrix_2_standalone/figure.pdf}
         \includegraphics[width=\linewidth]{figures/generalized_node_tree_2/figure.pdf}
-        \caption{The Generalized Node Tree of a hypergraph $\hypg$ which has $6$ hyperedges and $7$ nodes.}
+        \caption{The Generalized Node Tree of a hypergraph $\s H$ which has $6$ hyperedges and $7$ nodes.}
     \end{figure}
 
 
@@ -278,7 +278,7 @@
         \SetKwInOut{Output}{Output}
         \SetKwProg{Procedure}{Procedure}{:}{}
         \label[algorithm]{alg:WKS}
-        \Procedure{\WKS{$\s G$, $U$, $\ep$}}{}: \\
+        \Procedure{\WKS{$\s G$, $U$, $\ep$}}{}
         \Input{An instruction set $\s G$, a unitary $U$, and accuracy $\ep > 0$}
         \Output{$S \in \ba{\s G}$ such that $d\br{S_{\times}, U} < \ep$}
         Choose $\eta \geq \s O \br{\f{d^2 - 1}{\log \abs{\s G}} \log \br{1 / \ep}}$ \\
@@ -290,6 +290,40 @@
             }
         }
         \caption{Generation of Minimal Solutions}
+    \end{algorithm}
+    \begin{algorithm}[htp]
+        \caption{Canonical Minimalization Procedure}
+        \SetKwFunction{CanonicalMinimal}{CanonicalMinimal}
+        \SetKwInOut{Input}{Input}
+        \SetKwInOut{Output}{Output}
+        \SetKwProg{Procedure}{Procedure}{:}{}
+        \label[algorithm]{alg:canonical_minimal}
+        \Procedure{\CanonicalMinimal{$\s W$, $t$}}{}
+        \Input{A weighted hypergraph $\s W = \br{\s H, \w}$ and a transversal $t \in \mathscr{T}_{\succcurlyeq}\br{\s W}$.}
+        \Output{A minimal transversal $\Ga_{\s W}\br{t} \in \mathscr{T}^{*}_{\succcurlyeq}\br{\s W}$ such that $\Ga_{\s W}\br{t} \preccurlyeq t$.}
+        \For{$n \in \si\br{t}$}{
+            \If{$\br{t - \de_{n}} \in \mathscr{T}_{\succcurlyeq}\br{\s W}$}{
+                \Return \CanonicalMinimal{$\s W$, $t-\de_{n}$}
+            }
+        }
+        \Return $t$
+    \end{algorithm}
+    \begin{algorithm}[htp]
+        \caption{Solving the $k$-th Inequality}
+        \SetKwFunction{kSolve}{kSolve}
+        \SetKwInOut{Input}{Input}
+        \SetKwInOut{Output}{Output}
+        \SetKwProg{Procedure}{Procedure}{:}{}
+        \label[algorithm]{alg:kSolve}
+        \Procedure{\kSolve{$t$, $\s W_{k-1}^{g}$, $\s X_{k}$}}{}
+        \Input{A minimal transversal $t \in \mathscr{T}^{*}_{\succcurlyeq}\br{\s W_{k-1}^{g}}$, the associated generalized partial hypergraph $\s W_{k-1}^{g}$, and generalized nodes $\s X_{k}$ for $\s W_{k}^{g}$.}
+        \Output{The set of all minimal transversals of.}
+        \For{$n \in \si\br{t}$}{
+            \If{$\br{t - \de_{n}} \in \mathscr{T}_{\succcurlyeq}\br{\s W}$}{
+                \Return \CanonicalMinimal{$\s W$, $t-\de_{n}$}
+            }
+        }
+        \Return $t$
     \end{algorithm}
 
     \begin{definition}
@@ -349,8 +383,8 @@
 
     \subsection{Unsolved}
     Consider $\ga_{1}, \ga_{2}$ and $\ga_{1} + \ga_{2}$.
-    \[ I\br{\ga_a} = \bc{\br{\ga_{a} + \ti \ga_{a}} \cdot \prob{\mscenariowrap} \geq 0 \mid \ti \ga_{a} \in \transversals{\w\br{\ga_a}}{\hypg\br{\ga_a}}} \quad a = 1,2 \]
-    % \[ I\br{\ga_1 + \ga_2} = \bc{\br{\ga_{1} + \ga_{2} + \ti \ga_{12}} \cdot \prob{\mscenariowrap} \geq 0 \mid \ti \ga_{12} \in \transversals{\w\br{\ga_1}+\w\br{\ga_2}}{\hypg\br{\ga_1 + \ga_2}}} \]
+    \[ I\br{\ga_a} = \bc{\br{\ga_{a} + \ti \ga_{a}} \cdot \prob{\mscenariowrap} \geq 0 \mid \ti \ga_{a} \in \transversals{\w\br{\ga_a}}{\s H\br{\ga_a}}} \quad a = 1,2 \]
+    % \[ I\br{\ga_1 + \ga_2} = \bc{\br{\ga_{1} + \ga_{2} + \ti \ga_{12}} \cdot \prob{\mscenariowrap} \geq 0 \mid \ti \ga_{12} \in \transversals{\w\br{\ga_1}+\w\br{\ga_2}}{\s H\br{\ga_1 + \ga_2}}} \]
 
     \section*{Acknowledgments}
 
