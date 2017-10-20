@@ -1,7 +1,6 @@
 % Packages
 \usepackage{amsmath}
 \usepackage{esint} % For closed integrals
-\usepackage{packages/fancyvec} % For better vectors
 \usepackage{amssymb} % For set symbols
 \usepackage{mathtools} % For ceiling/floor brackets
 \usepackage{siunitx} % For units
@@ -25,11 +24,9 @@
 \newcommand{\braket}[2]{\left< #1 \middle| #2 \right>} % bra|ket
 \newcommand{\bcm}[2]{\left\{ #1 \middle| #2 \right\}} % bra|ket
 \newcommand{\bramidket}[3]{\left< #1 \middle| #2 \middle| #3 \right>} % bra|mid|ket
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert} % norm
 
 \newcommand{\f}[2]{\frac{#1}{#2}} % fraction shorthand
-\newcommand{\norm}[1]{\left\lVert#1\right\rVert} % norm
-\newcommand{\cross}{\times} % cross alias
-\newcommand{\tenprod}{\otimes} % tensor product alias
 \newcommand{\iso}{\cong} % isomorphic alias
 \newcommand{\del}{\nabla} % nabla alias
 \newcommand{\vdel}{\vec{\nabla}} % nabla alias
@@ -41,21 +38,10 @@
 \newcommand{\defined}{\equiv} % defined alias
 \newcommand{\celsius}{^o C} % Simple celsius I'll likely improve later
 \newcommand{\w}{\omega} % omega alias
-\newcommand{\sL}{\mathcal{L}} % Lagrangian script
 \newcommand{\eq}{\addtocounter{equation}{1}\tag{\theequation}} % adds a number to unnumbered equation
-\newcommand{\st}{\mid} % integral with limits alias
 \newcommand{\tsb}[1]{_\text{#1}} % Text subscript
 \newcommand{\tsp}[1]{^\text{#1}} % Text superscript
-% \newcommand{\note}[1]{\quad \text{#1}} % Equation note
 \newcommand{\ident}{\mathbbm{1}}
-
-% sequences
-\newcommand{\tok}[2]{#1, \ldots, #2}
-
-% braces
-\newcommand{\untext}[2]{\underbrace{#1}_{\text{#2}}}
-\newcommand{\ovtext}[2]{\overbrace{#1}^{\text{#2}}}
-\newcommand{\iszero}[1]{\underbrace{#1}_{= 0}}
 
 % greek
 \newcommand{\al}{\alpha}
@@ -66,7 +52,6 @@
 \newcommand{\De}{\Delta}
 \newcommand{\ep}{\epsilon}
 \newcommand{\vep}{\varepsilon}
-\newcommand{\Ep}{\epsilon}
 \newcommand{\om}{\omega}
 \newcommand{\Om}{\Omega}
 \newcommand{\te}{\theta}
@@ -86,35 +71,14 @@
 \DeclareMathOperator{\sgn}{sgn}
 \DeclareMathOperator{\sinc}{sinc}
 
-% arrows
-\newcommand{\ar}{\rightarrow}
-\newcommand{\lar}{\leftarrow}
-
-% Horizontal Box used for drawing in post-compilation
-\newcommand{\cbox}{\begin{center}
-\fbox{\begin{minipage}{4in} \hfill\vspace{2in} \end{minipage}}
-\end{center}}
-
 % Math Sets
 \newcommand{\R}{{\mathbb{R}}}
-%\ProvideCommand{\C}{{\mathbb{C}}}
 \newcommand{\Z}{{\mathbb{Z}}}
 \newcommand{\N}{{\mathbb{N}}}
 \newcommand{\Q}{{\mathbb{Q}}}
 
 % Script macro
 \newcommand{\s}[1]{\mathcal{#1}}
-
-% Vectors
-% see fancyvec
-% tilde
-\newcommand{\ti}[1]{\tilde{#1}\hspace{0pt}} % Note the hspace is for {\ti{a}^b}_c to render correctly
-\newcommand{\tbar}[1]{\bar{#1}\hspace{0pt}} % Note the hspace is for {\bar{a}^b}_c to render correctly
-\newcommand{\tk}[1]{\hspace{0pt}} % Note the hspace is for {\bar{a}^b}_c to render correctly
-
-% Scipt letters
-\def\rcurs{{\mbox{$\resizebox{.09in}{.08in}{\includegraphics[trim= 1em 0 14em 0,clip]{script_r/ScriptR.pdf}}$}}}
-\def\brcurs{{\mbox{$\resizebox{.09in}{.08in}{\includegraphics[trim= 1em 0 14em 0,clip]{script_r/BoldR.pdf}}$}}}
 
 % Differentials
 \newcommand{\dif}{\mathrm{d}} % differential
@@ -146,3 +110,122 @@
 \newcommand{\oiintl}{\oiint\limits} % integral with limits alias
 \newcommand{\iiintl}{\iiint\limits} % integral with limits alias
 \newcommand{\oiiintl}{\oiiint\limits} % integral with limits alias
+
+\providecommand{\ovec}[1]{\overrightarrow{#1}}
+\providecommand{\bvec}[1]{\mathbf{#1}}
+\providecommand{\dvec}[1]{\dot{\vec{#1}}}
+\providecommand{\ddvec}[1]{\ddot{\vec{#1}}}
+\providecommand{\dddvec}[1]{\dddot{\vec{#1}}}
+
+% Vectors
+\newcommand{\ti}[1]{\tilde{#1}\hspace{0pt}} % Note the hspace is for {\ti{a}^b}_c to render correctly
+\newcommand{\tbar}[1]{\bar{#1}\hspace{0pt}} % Note the hspace is for {\bar{a}^b}_c to render correctly
+\newcommand{\tk}[1]{\hspace{0pt}} % Note the hspace is for {\bar{a}^b}_c to render correctly
+% a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,
+
+\providecommand{\vrp}{\vec{r}\,'}
+
+\providecommand{\va}{\vec{a}}
+\providecommand{\vb}{\vec{b}}
+\providecommand{\vc}{\vec{c}}
+\providecommand{\vd}{\vec{d}}
+\providecommand{\ve}{\vec{e}}
+\providecommand{\vf}{\vec{f}}
+\providecommand{\vg}{\vec{g}}
+\providecommand{\vh}{\vec{h}}
+\providecommand{\vi}{\vec{i}}
+\providecommand{\vj}{\vec{j}}
+\providecommand{\vk}{\vec{k}}
+\providecommand{\vl}{\vec{l}}
+\providecommand{\vm}{\vec{m}}
+\providecommand{\vn}{\vec{n}}
+\providecommand{\vo}{\vec{o}}
+\providecommand{\vp}{\vec{p}}
+\providecommand{\vq}{\vec{q}}
+\providecommand{\vr}{\vec{r}} % Conflicts with revtex
+\providecommand{\vs}{\vec{s}}
+\providecommand{\vt}{\vec{t}}
+\providecommand{\vu}{\vec{u}}
+\providecommand{\vv}{\vec{v}}
+\providecommand{\vw}{\vec{w}}
+\providecommand{\vx}{\vec{x}}
+\providecommand{\vy}{\vec{y}}
+\providecommand{\vz}{\vec{z}}
+\providecommand{\ha}{\hat{a}}
+\providecommand{\hb}{\hat{b}}
+\providecommand{\hc}{\hat{c}}
+\providecommand{\hd}{\hat{d}}
+\providecommand{\he}{\hat{e}}
+\providecommand{\hf}{\hat{f}}
+\providecommand{\hg}{\hat{g}}
+\providecommand{\hh}{\hat{h}}
+\providecommand{\hi}{\hat{i}}
+\providecommand{\hj}{\hat{j}}
+\providecommand{\hk}{\hat{k}}
+\providecommand{\hl}{\hat{l}}
+\providecommand{\hm}{\hat{m}}
+\providecommand{\hn}{\hat{n}}
+\providecommand{\ho}{\hat{o}}
+\providecommand{\hp}{\hat{p}}
+\providecommand{\hq}{\hat{q}}
+\providecommand{\hr}{\hat{r}}
+\providecommand{\hs}{\hat{s}}
+% \providecommand{\ht}{\hat{t}} Causes problems. Sometimes already defined. Nearly perfect :(.
+\providecommand{\hu}{\hat{u}}
+\providecommand{\hv}{\hat{v}}
+\providecommand{\hw}{\hat{w}}
+\providecommand{\hx}{\hat{x}}
+\providecommand{\hy}{\hat{y}}
+\providecommand{\hz}{\hat{z}}
+\providecommand{\hA}{\hat{A}}
+\providecommand{\hB}{\hat{B}}
+\providecommand{\hC}{\hat{C}}
+\providecommand{\hD}{\hat{D}}
+\providecommand{\hE}{\hat{E}}
+\providecommand{\hF}{\hat{F}}
+\providecommand{\hG}{\hat{G}}
+\providecommand{\hH}{\hat{H}}
+\providecommand{\hI}{\hat{I}}
+\providecommand{\hJ}{\hat{J}}
+\providecommand{\hK}{\hat{K}}
+\providecommand{\hL}{\hat{L}}
+\providecommand{\hM}{\hat{M}}
+\providecommand{\hN}{\hat{N}}
+\providecommand{\hO}{\hat{O}}
+\providecommand{\hP}{\hat{P}}
+\providecommand{\hQ}{\hat{Q}}
+\providecommand{\hR}{\hat{R}}
+\providecommand{\hS}{\hat{S}}
+\providecommand{\hT}{\hat{T}} % Already defined. Neatly perfect :(.
+\providecommand{\hU}{\hat{U}}
+\providecommand{\hV}{\hat{V}}
+\providecommand{\hW}{\hat{W}}
+\providecommand{\hX}{\hat{X}}
+\providecommand{\hY}{\hat{Y}}
+\providecommand{\hZ}{\hat{Z}}
+\providecommand{\vA}{\vec{A}}
+\providecommand{\vB}{\vec{B}}
+\providecommand{\vC}{\vec{C}}
+\providecommand{\vD}{\vec{D}}
+\providecommand{\vE}{\vec{E}}
+\providecommand{\vF}{\vec{F}}
+\providecommand{\vG}{\vec{G}}
+\providecommand{\vH}{\vec{H}}
+\providecommand{\vI}{\vec{I}}
+\providecommand{\vJ}{\vec{J}}
+\providecommand{\vK}{\vec{K}}
+\providecommand{\vL}{\vec{L}}
+\providecommand{\vM}{\vec{M}}
+\providecommand{\vN}{\vec{N}}
+\providecommand{\vO}{\vec{O}}
+\providecommand{\vP}{\vec{P}}
+\providecommand{\vQ}{\vec{Q}}
+\providecommand{\vR}{\vec{R}}
+\providecommand{\vS}{\vec{S}}
+\providecommand{\vT}{\vec{T}}
+\providecommand{\vU}{\vec{U}}
+\providecommand{\vV}{\vec{V}}
+\providecommand{\vW}{\vec{W}}
+\providecommand{\vX}{\vec{X}}
+\providecommand{\vY}{\vec{Y}}
+\providecommand{\vZ}{\vec{Z}}

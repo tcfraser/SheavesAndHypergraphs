@@ -2,13 +2,14 @@
 \documentclass[aps, 10pt, english, twoside, twocolumn, pra, nofootinbib, tightenlines, longbibliography, superscriptaddress]{revtex4-1}
 
 % === All of the Packages I use frequently ===
-\usepackage{packages/shared}
-\usepackage{packages/misc_commands}
+\usepackage{document_config}
+
+% === Drafting Declarations ===
+\draftprofile[TC Fraser]{TC}{Red}
 
 \begin{document}
     \title{
-    Edge-Weighted Hypergraph Transversals: \\
-    An Algorithm for Non-Contextuality Inequalities
+    A Memory-Efficient Algorithm for Generating Non-Contextuality Inequalities
     }
     \author{Thomas C. Fraser}
     \email{tcfraser@tcfraser.com}
@@ -215,20 +216,33 @@
     \end{figure}
 
     \begin{definition}
-        Given a $\term{weighting}$ $\w \in \Z_{\geq 1}^{\edges}$, a vector $t \in \Z_{\geq 0}^{\nodes}$\footnote{Here, $\Z_{\geq c}^{m}$ denotes the set of all $m$-length integer vectors $x$ such that $x_{i} \geq c, \forall i$.} is an \term{$\w$-transversal} of the hypergraph $\hypg$ if it is a solution to $t \cdot \hypg \succeq \w$.
+        A \term{weighted hypergraph} is an ordered pair $\s W = \br{\s H, \w}$ consisting of a hypergraph $\s H$ and corresponding \textit{weighting} $\w \in \Z_{\geqslant 1}^{\s E}$ over the edges of $\s H$.
     \end{definition}
 
     \begin{definition}
-        An $\w$-transversal $t$ of the hypergraph $\hypg$ is \term{minimal} if there does not exist another $\w$-transversal $t'$ of $\hypg$ different from $t$ such that $t' \preceq t$.
+        A \term{transversal} of a weighted hypergraph $\s W = \br{\s H, \w}$ is a positive-integer solution $t \in \Z_{\geqslant0}^{\s N}$ of the following system of linear inequalities:
+        \[ t \cdot \s H \succcurlyeq \w \iff \forall \s E \in \s H, \, \sum_{n \in \s E}t_{n} \defined t \cdot \s E \geqslant \w_{\s E} \eq \label{eq:primary_hypergraph_inequality_equation} \]
+        The space of all transversals will be denoted $\mathscr{T}_{\succcurlyeq}\br{\s W}$.
     \end{definition}
-
-    In the special case where $\w = \mathbf{1}_{\edges}$, one recovers the notion of a \textit{transversal} of a hypergraph; $t \cdot \hypg \succeq \mathbf{1}_{\edges}$ if and only if the support $\si\br{t} \subseteq \nodes$ of $t$ intersects every hyperedge of $\hypg$, i.e. $\si\br{t} \cap \edges_{i} \neq 0, \forall \edges_i \in \edges$.
 
     \begin{definition}
-        The set of all minimal, $\w$-transversals of $\hypg$ will be denoted $\transversals{\succeq\w}{\hypg}$.
+        A transversal $t \in \mathscr{T}_{\succcurlyeq}\br{\s W}$ is \term{minimal} if
+        \[ \nexists t' \in \mathscr{T}_{\succcurlyeq}\br{\s W}, \, t'\neq t \text{ and } t' \preccurlyeq t. \]
+        The space of all minimal transversals will be denoted $\mathscr{T}^{*}_{\succcurlyeq}\br{\s W}$.
     \end{definition}
 
-    The purpose of \cref{sec:algorithm_section} is to provide an algorithm which, when given a weighting $\w$ and hypergraph $\hypg$, computes $\transversals{\succeq\w}{\hypg}$. In the special case of $\w = \mathbf{1}_{\edges}$, it is customary to identify a class of hypergraphs known as \textit{simple} or \textit{Sperner} hypergraphs wherein $\forall i, j : \edges_i \subseteq \edges_j \Rightarrow j = i$ \cite{Berge_1984}. Non-simple hypergraphs possess a redundancy: whenever $\edges_i \subset \edges_j$, any $t \subseteq \nodes$ which satisfies $t \cap \edges_i \neq 0$ automatically satisfies $t \cap \edges_j \neq 0$ and hence any such $\edges_j$ can be ignored by any transversal generation algorithm. Analogous redundancies are absent from the $\w$-transversal generation problem because $\w \in \Z_{\geq 1}^{\edges}$ is arbitrary.
+    In the special case where $\w = \mathbf{1}$\footnote{Here $\mathbf{1}$ denotes the vector containing all ones.}, one recovers the notion of a transversal $t \in \bc{0,1}^{\nodes}$ of an \textit{unweighted} hypergraph; $t \cdot \s H \succeq \mathbf{1}$ if and only if the support of $t$ intersects every hyperedge of $\s H$, i.e. $\forall \s E, \, t \cdot \s E \neq 0$.
+
+    The purpose of \cref{sec:algorithm_section} is to provide an algorithm which, when given a weighted hypergraph $\s W$, outputs all minimal transversals $\mathscr{T}^{*}_{\succcurlyeq}\br{\s W}$. Procedurally, the algorithm operates inductively over an arbitrary ordering of the hyperedges in $\s W$. It begins by minimally solving the first inequality $t \cdot \s E_1 \geqslant \w_{\s E_1}$ of \cref{eq:primary_hypergraph_inequality_equation} and then subsequently solving the the $(k+1)$-th inequality $t \cdot \s E_{k+1} \geqslant \w_{\s E_{k+1}}$ given a minimal solution for first $k$ inequalities. By construction, these \textit{partial} solutions are transversals of a partial weighted hypergraph.
+    \begin{definition}
+        The \term{partial weighted hypergraph} $\s W_{k}$ of $\s W = \br{\s H, \w}$ is a weighted hypergraph consisting of the first $k$ hyperedges of $\s H$ and corresponding weights from $\w$.
+        \begin{align*}
+            \s W &= \br{\s H, \w} = \br{\bc{\s E_1, \ldots, \s E_q}, \bc{\w_{\s E_1}, \ldots, \w_{\s E_q}}} \\
+            \s W_{k} &= \br{\bc{\s E_1, \ldots, \s E_k}, \bc{\w_{\s E_1}, \ldots, \w_{\s E_k}}} \qquad 1 \leq k \leq q
+        \end{align*}
+    \end{definition}
+
+    In the special case of $\w = \mathbf{1}_{\edges}$, it is customary to identify a class of hypergraphs known as \textit{simple} or \textit{Sperner} hypergraphs wherein $\forall i, j : \edges_i \subseteq \edges_j \Rightarrow j = i$ \cite{Berge_1984}. Non-simple hypergraphs possess a redundancy: whenever $\edges_i \subset \edges_j$, any $t \subseteq \nodes$ which satisfies $t \cap \edges_i \neq 0$ automatically satisfies $t \cap \edges_j \neq 0$ and hence any such $\edges_j$ can be ignored by any transversal generation algorithm. Analogous redundancies are absent from the $\w$-transversal generation problem because $\w \in \Z_{\geq 1}^{\edges}$ is arbitrary.
 
     \subsection{Generalized Nodes}
 
