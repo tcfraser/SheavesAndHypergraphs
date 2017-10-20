@@ -317,7 +317,7 @@
         \label[algorithm]{alg:kSolve}
         \Procedure{\kSolve{$t$, $\s W_{k-1}^{g}$, $\s X_{k}$}}{}
         \Input{A minimal transversal $t \in \mathscr{T}^{*}_{\succcurlyeq}\br{\s W_{k-1}^{g}}$, the associated generalized partial hypergraph $\s W_{k-1}^{g}$, and generalized nodes $\s X_{k}$ for $\s W_{k}^{g}$.}
-        \Output{The set of all minimal transversals of.}
+        \Output{The set $\Ga^{-1}_{t}\br{\s W^{g}_{k-1}} \cap \mathscr{T}^{*}_{\succcurlyeq}\br{\s W_{k}^{g}}$ of minimal transversals of $\s W_{k}^{g}$ which are canonically minimal to $t$.}
         \For{$n \in \si\br{t}$}{
             \If{$\br{t - \de_{n}} \in \mathscr{T}_{\succcurlyeq}\br{\s W}$}{
                 \Return \CanonicalMinimal{$\s W$, $t-\de_{n}$}
