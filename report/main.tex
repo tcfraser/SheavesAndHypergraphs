@@ -9,7 +9,7 @@
 
 \begin{document}
     \title{
-    A Memory-Efficient Algorithm for Generating Non-Contextuality Inequalities
+    An Efficient Algorithm for Generating Non-Contextuality Inequalities
     }
     \author{Thomas C. Fraser}
     \email{tcfraser@tcfraser.com}
@@ -137,7 +137,7 @@
     \[ a \implies c_1 \vee \cdots \vee c_n = \bigvee_{c \in C} c \eq \label{eq:hardy_logical_implication} \]
     Which can be dictated: \textit{whenever the event $a$ occurs, at least one event in $C$ occurs.} In accordance with the logical form of \cref{eq:hardy_logical_implication}, $a$ will be referred to as the \term{antecedent} and $C$ as the \term{consequent set}. To clarify, a marginal model $\prob{\mscenariowrap} \in \probset{\mscenariowrap}$ satisfies \cref{eq:hardy_logical_implication} if there always at least one $c \in C$ that is \textit{possible} ($\prob{\mscenariowrap}^{c} > 0$) whenever $a$ is possible. A marginal model violates \cref{eq:hardy_logical_implication} whenever \textit{none} of events in $c$ are possible while $a$ remains possible. Marginal models that violate logical statements such as \cref{eq:hardy_logical_implication} are known as \term{Hardy Paradoxes}~\cite{Inflation,Mansfield_2012,Mancinska_2014}. Motivated by a greater sense of robustness compared to possibilistic constraints, the concept of witnessing quantum contextuality on a logical level has be analyzed thoroughly for decades~\cite{Abramsky_2012,Greenberger_1990}.
 
-    All logical implications of the form of \cref{eq:hardy_logical_implication} can be derived by first selecting am antecedent marginal event $a$, then constructing a consequent set $C$ such that \cref{eq:hardy_logical_implication} holds. This is accomplished by making use of \cref{lem:implication_lemma}.
+    All logical implications of the form of \cref{eq:hardy_logical_implication} can be derived by first selecting an antecedent marginal event $a$, then constructing a consequent set $C$ such that \cref{eq:hardy_logical_implication} holds. This is accomplished by making use of \cref{lem:implication_lemma}.
 
     \begin{lemma}
         \label{lem:implication_lemma}
@@ -233,7 +233,7 @@
 
     In the special case where $\w = \mathbf{1}$\footnote{Here $\mathbf{1}$ denotes the vector containing all ones.}, one recovers the notion of a transversal $t \in \bc{0,1}^{\nodes}$ of an \textit{unweighted} hypergraph; $t \cdot \s H \succeq \mathbf{1}$ if and only if the support of $t$ intersects every hyperedge of $\s H$, i.e. $\forall \s E, \, t \cdot \s E \neq 0$.
 
-    The purpose of \cref{sec:algorithm_section} is to provide an algorithm which, when given a weighted hypergraph $\s W$, outputs all minimal transversals $\mathscr{T}^{*}_{\succcurlyeq}\br{\s W}$. Procedurally, the algorithm operates inductively over an arbitrary ordering of the hyperedges in $\s W$. It begins by minimally solving the first inequality $t \cdot \s E_1 \geqslant \w_{\s E_1}$ of \cref{eq:primary_hypergraph_inequality_equation} and then subsequently solving the the $(k+1)$-th inequality $t \cdot \s E_{k+1} \geqslant \w_{\s E_{k+1}}$ given a minimal solution for first $k$ inequalities. By construction, these \textit{partial} solutions are transversals of a partial weighted hypergraph.
+    The purpose of \cref{sec:algorithm_section} is to provide an algorithm which, when given a weighted hypergraph $\s W$, outputs all minimal transversals $\mathscr{T}^{*}_{\succcurlyeq}\br{\s W}$. Procedurally, the algorithm operates inductively over an arbitrary ordering of the hyperedges in $\s W$. It begins by minimally solving the first inequality $t \cdot \s E_1 \geqslant \w_{\s E_1}$ of \cref{eq:primary_hypergraph_inequality_equation} and then subsequently solving the the $k$-th inequality $t \cdot \s E_{k} \geqslant \w_{\s E_{k}}$ given a minimal solution for first $k-1$ inequalities. These \textit{partial} solutions are transversals of a \textit{partial weighted hypergraph}.
     \begin{definition}
         The \term{partial weighted hypergraph} $\s W_{k}$ of $\s W = \br{\s H, \w}$ is a weighted hypergraph consisting of the first $k$ hyperedges of $\s H$ and corresponding weights from $\w$.
         \begin{align*}
@@ -260,7 +260,7 @@
     \end{itemize}
     As a special case, if $\edges_{k+1}$ introduces any new nodes not captured by $\s X_{k}$, these nodes form a unique type $\de$ in $\s X_{k+1}$.
     \begin{itemize}
-        \item[($\de$)] If $\de X \defined \edges_{k+1} \cap \br{\bigcup_{X \in \s X_{k}} X}$, then $\de X \in \s X_{k+1}^{\de}$.
+        \item[($\de$)] If $X_{\de} \defined \edges_{k+1} \cap \br{\bigcup_{X \in \s X_{k}} X} \neq \emptyset$, then $X_{\de} \in \s X_{k+1}^{\de}$.
     \end{itemize}
 
     \begin{figure}
@@ -273,30 +273,8 @@
     \subsection{An Algorithm}
     \label{sec:algorithm_section}
     \begin{algorithm}[htp]
-        \SetKwFunction{WKS}{WKS}
-        \SetKwInOut{Input}{Input}
-        \SetKwInOut{Output}{Output}
-        \SetKwProg{Procedure}{Procedure}{:}{}
-        \label[algorithm]{alg:WKS}
-        \Procedure{\WKS{$\s G$, $U$, $\ep$}}{}
-        \Input{An instruction set $\s G$, a unitary $U$, and accuracy $\ep > 0$}
-        \Output{$S \in \ba{\s G}$ such that $d\br{S_{\times}, U} < \ep$}
-        Choose $\eta \geq \s O \br{\f{d^2 - 1}{\log \abs{\s G}} \log \br{1 / \ep}}$ \\
-        $T \leftarrow \bigcup_{\ell = 0}^{\eta} \s G^{\ell}$ \\
-        \For{$S \in T$}{
-            $S_{\times} \leftarrow \prod_{g \in S} g$ \\
-            \If{$d\br{S_{\times}, U} < \ep$}{
-                return S
-            }
-        }
-        \caption{Generation of Minimal Solutions}
-    \end{algorithm}
-    \begin{algorithm}[htp]
         \caption{Canonical Minimalization Procedure}
         \SetKwFunction{CanonicalMinimal}{CanonicalMinimal}
-        \SetKwInOut{Input}{Input}
-        \SetKwInOut{Output}{Output}
-        \SetKwProg{Procedure}{Procedure}{:}{}
         \label[algorithm]{alg:canonical_minimal}
         \Procedure{\CanonicalMinimal{$\s W$, $t$}}{}
         \Input{A weighted hypergraph $\s W = \br{\s H, \w}$ and a transversal $t \in \mathscr{T}_{\succcurlyeq}\br{\s W}$.}
@@ -311,26 +289,62 @@
     \begin{algorithm}[htp]
         \caption{Solving the $k$-th Inequality}
         \SetKwFunction{kSolve}{kSolve}
-        \SetKwInOut{Input}{Input}
-        \SetKwInOut{Output}{Output}
-        \SetKwProg{Procedure}{Procedure}{:}{}
         \label[algorithm]{alg:kSolve}
-        \Procedure{\kSolve{$t$, $\s W_{k-1}^{g}$, $\s X_{k}$}}{}
-        \Input{A minimal transversal $t \in \mathscr{T}^{*}_{\succcurlyeq}\br{\s W_{k-1}^{g}}$, the associated generalized partial hypergraph $\s W_{k-1}^{g}$, and generalized nodes $\s X_{k}$ for $\s W_{k}^{g}$.}
-        \Output{The set $\Ga^{-1}_{t}\br{\s W^{g}_{k-1}} \cap \mathscr{T}^{*}_{\succcurlyeq}\br{\s W_{k}^{g}}$ of minimal transversals of $\s W_{k}^{g}$ which are canonically minimal to $t$.}
-        \For{$n \in \si\br{t}$}{
-            \If{$\br{t - \de_{n}} \in \mathscr{T}_{\succcurlyeq}\br{\s W}$}{
-                \Return \CanonicalMinimal{$\s W$, $t-\de_{n}$}
+        \Procedure{\kSolve{$t$, $k$}}{}
+        \Input{A minimal transversal $t \in \mathscr{T}^{*}_{\succcurlyeq}\br{\s W_{k-1}^{k-1}}$.}
+        \Output{The set $\mathscr{T}^{*}_{\succcurlyeq}\br{\s W_{k}^{k}} \cap \br{\bigcup_{f \in \s O\br{t}}\Ga^{-1}_{f}\br{\s W^{k}_{k-1}}}$ of minimal transversals of $\s W_{k}^{k}$ which are canonically minimal to some offspring of $t$.}
+        \For{$f \in \s O\br{t}$}{
+            $\Delta \w = \w_{\s E_{k}} - \sum_{X \in \s X_{k}^{\be,\ga_2}} f_{X}$ \\
+            \uIf{$\Delta \w \leqslant 0$}{
+                \Yield{$f$}
+            }
+            \Else{
+                \For{$s \in \s S\br{f,\Delta \w}$}{
+                    \If{$f+s \in \mathscr{T}^{*}_{\succcurlyeq}\br{\s W_{k}^{k}}$}{
+                        \If{$\Ga_{f + s}\br{\s W^{k}_{k-1}} = f$}{
+                            \Yield{$f + s$}
+                        }
+                    }
+                }
             }
         }
-        \Return $t$
+    \end{algorithm}
+    Here $\s W^{k}_{k-1}$ denotes the partial hypergraph $\s W_{k-1}$ expressed in terms of the generalized nodes $\s X_{k}$.
+    \begin{algorithm}[htp]
+        \caption{Generation of Weighted Hypergraph Transversals}
+        \SetKwFunction{WKS}{WKS}
+        \SetKwFunction{WKSWorker}{WKSWorker}
+        \label[algorithm]{alg:WKS}
+        \Procedure{\WKS{$\s W$}}{}
+        \Input{A weighted hypergraph $\s W$.}
+        \Output{The set $\mathscr{T}^{*}_{\succcurlyeq}\br{\s W}$ of all minimal transversals of $\s W$.}
+        Compute $\bc{\s X_{1}, \ldots, \s X_{q}}$. \\
+        Compute $\bc{\s W_{1}^{1}, \s W_{1}^{2}, \s W_{2}^{2}, \ldots, \s W_{q-1}^{q-1}, \s W_{q-1}^{q}, \s W_{q}^{q}}$. \\
+        Compute initial transversal $t$: $t_{\s E_1} = \w_{\s E_{1}}$. ($\mathscr{T}_{\succcurlyeq}\br{\s W^{g}_{1}} = \bc{t}$)\\
+        \For{$t' \in$ \WKSWorker{$t$, $2$}}{
+            \YieldFrom{$U_{\!\s X_{q}}\br{t'}$}
+        }
+    \end{algorithm}
+    \begin{algorithm}[htp]
+        \caption{Depth-First Subroutine for \cref{alg:WKS}.}
+        \Procedure{\WKSWorker{$t, k$}}{}
+        \Input{A minimal transversal $t \in \mathscr{T}^{*}_{\succcurlyeq}\br{\s W_{k-1}^{k-1}}$.}
+        \Output{The set of all minimal transversals of $\s W_{q}^{q}$ canonically minimal to $t$ expressed in terms of $\s X_{q}$.}
+        \uIf{$k > q$}{
+            \Yield{$t$}
+        }
+        \Else{
+            \For{$t' \in$ \kSolve{$t$, $\s W_{k}^{g}$}}{
+                \YieldFrom{\WKSWorker{$t', k+1$}}
+            }
+        }
     \end{algorithm}
 
     \begin{definition}
-        Given a set of generalized nodes $\s X$ for $\s N$, define the \term{unpacking operation} $\mathrm{U}_{\!\s X}$ which takes any vector $t \in \Z_{\geq 0}^{\s X}$ to a family of vectors $\mathrm{U}_{\!\s X}\br{t} \subset \Z_{\geq 0}^{\s N}$:
-        \[ \mathrm{U}_{\!\s X}\br{t} \defined \bcm{t' \in \Z_{\geq 0}^{\s N}}{\forall X \in \s X, {\sum}_{n \in X} t'_{n} = t_{X}} \]
+        Given a set of generalized nodes $\s X$ for $\s N$, define the \term{unpacking operation} $U_{\!\s X}$ which takes any vector $t \in \Z_{\geq 0}^{\s X}$ to a family of vectors $U_{\!\s X}\br{t} \subset \Z_{\geq 0}^{\s N}$:
+        \[ U_{\!\s X}\br{t} \defined \bcm{t' \in \Z_{\geq 0}^{\s N}}{\forall X \in \s X, {\sum}_{n \in X} t'_{n} = t_{X}} \]
     \end{definition}
-    \[ \abs{\mathrm{U}_{\!\s X}\br{t}} = \prod_{X \in \s X} \binom{t_{X} + \abs{X} - 1}{t_{X}} \]
+    \[ \abs{U_{\!\s X}\br{t}} = \prod_{X \in \s X} \binom{t_{X} + \abs{X} - 1}{t_{X}} \]
     % \[ \mathbf{E}\br{\s H} = \bc{\s E_1, \ldots, \s E_q} \]
     % \[ \mathbf{N}\br{\s H} = \bc{n_1, \ldots, n_p} \]
     % \[ \mathbf{W}\br{\s H} = \bc{\w_1, \ldots, \w_q} \]
@@ -338,7 +352,7 @@
     % \[ \mathbf{E}\br{\s H_k} = \bc{\s E_1, \ldots, \s E_k} \]
     % \[ \mathbf{N}\br{\s H_k} = \bc{n_1, \ldots, n_k} \]
 
-    \[ \widetilde {\s T}_{\succeq \w_{k]}}\br{\s H_{k]}} = \mathrm{U}_{\!\s X_{k}}\br{\widetilde {\s T}_{\succeq \w_{k]}}^{\s X_{k}}\br{\s H_{k]}}} \]
+    \[ \widetilde {\s T}_{\succeq \w_{k]}}\br{\s H_{k]}} = U_{\!\s X_{k}}\br{\widetilde {\s T}_{\succeq \w_{k]}}^{\s X_{k}}\br{\s H_{k]}}} \]
     \[ \s X_{k} = \s X_{k}^{\al} \sqcup \s X_{k}^{\be} \sqcup \s X_{k}^{\ga_1} \sqcup \s X_{k}^{\ga_2} \sqcup \s X_{k}^{\de} \]
     \[ \s X_{k} \defined \s X_{k}^{\al,\be,\ga_1,\ga_2,\de} \]
     \begin{definition}
